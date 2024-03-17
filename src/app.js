@@ -34,7 +34,7 @@ if (config.NODE_ENV !== "production") {
 }
 
 // init route
-app.use("/", require("./routers"))
+app.use("/api/v1", require("./routers"))
 app.use(handleNotFound)
 app.use(handleError)
 

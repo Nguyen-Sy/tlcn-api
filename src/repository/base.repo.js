@@ -178,10 +178,14 @@ class Repository extends Cache {
 		})
 	}
 
-	findOneAndDelete = async (filter) => {
+	findOneAndSoftDelete = async (filter) => {
 		return await this.model.findOneAndUpdate(filter, {
 			isDeleted: true,
 		})
+	}
+
+	findOneAndDelete = async (filter) => {
+		return await this.model.findOneAndDelete(filter)
 	}
 
 	page = async (
