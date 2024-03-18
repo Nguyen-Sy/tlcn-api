@@ -1,4 +1,5 @@
 "use strict"
+
 const mailgen = require("mailgen")
 const nodemailer = require("nodemailer")
 const { logger } = require("../plugin")

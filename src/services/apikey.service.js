@@ -1,3 +1,5 @@
+"use strict"
+
 const { apiKeyRepository } = require("../repository")
 
 class ApiKeyService {

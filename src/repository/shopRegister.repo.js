@@ -1,3 +1,5 @@
+"use strict"
+
 const BaseRepository = require("./base.repo")
 const { shopRegisterModel } = require("../models")
 

@@ -1,3 +1,5 @@
+"use strict"
+
 const redisClient = require("../db/init.redis")
 const { Types } = require("mongoose")
 class Cache {
