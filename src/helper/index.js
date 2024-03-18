@@ -10,4 +10,5 @@ module.exports = {
 	asyncHandler,
 	verifyFacebookToken,
 	verifyGoogleToken,
+	constant: require("./constant"),
 }

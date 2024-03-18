@@ -9,6 +9,9 @@ const signupSchema = joi.object({
 			/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
 			"strong password",
 		),
+	name: joi.string(),
+	phone: joi.string(),
+	avatar: joi.string()
 })
 
 const loginSchema = joi.object({

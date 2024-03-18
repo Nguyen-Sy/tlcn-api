@@ -23,21 +23,13 @@ router.post(
 	}),
 	asyncHandler(authController.loginLocal),
 )
-router.get(
-	"/facebook",
-	passport.authenticate("facebook", { session: false }),
-	asyncHandler(authController.loginFacebook),
-)
+router.get("/facebook", passport.authenticate("facebook", { session: false }))
 router.get(
 	"/facebook/callback",
 	passport.authenticate("facebook", { session: false }),
 	asyncHandler(authController.loginFacebookCallback),
 )
-router.get(
-	"/google",
-	passport.authenticate("google", { session: false }),
-	asyncHandler(authController.loginGoogle),
-)
+router.get("/google", passport.authenticate("google", { session: false }))
 router.get(
 	"/google/callback",
 	passport.authenticate("google", { session: false }),

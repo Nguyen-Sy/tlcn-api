@@ -1,23 +1,24 @@
 "use strict"
 
 const { Schema, model } = require("mongoose")
+const {
+	constant: { ROLES },
+} = require("../helper")
 
 const DOCUMENT_NAME = "userLogin"
 const COLLECTION_NAME = "userLogins"
 
 var userLoginSchema = new Schema(
 	{
-		email: {
-			type: String,
-			unique: true,
-			spare: true,
-		},
-		password: {
-			type: String,
-		},
-		verified: {
-			type: Boolean,
-			default: false,
+		local: {
+			email: {
+				type: String,
+				unique: true,
+				spare: true,
+			},
+			password: {
+				type: String,
+			},
 		},
 		facebook: {
 			id: String,
@@ -31,6 +32,10 @@ var userLoginSchema = new Schema(
 			name: String,
 			refreshToken: String,
 		},
+		verified: {
+			type: Boolean,
+			default: false,
+		},
 		refreshToken: String,
 		refreshTokenUsed: [],
 		token: {
@@ -38,6 +43,12 @@ var userLoginSchema = new Schema(
 			spare: true,
 			unique: true,
 		},
+		role: {
+			type: String,
+			default: ROLES.USER,
+			enum: Object.values(ROLES),
+		},
+		isDelete: Boolean,
 	},
 	{
 		timestamps: true,

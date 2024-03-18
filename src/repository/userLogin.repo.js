@@ -1,7 +1,6 @@
 const BaseRepository = require("./base.repo")
 const { v4: uuidv4 } = require("uuid")
 const { userLoginModel } = require("../models")
-
 class UserLoginRepository extends BaseRepository {
 	constructor() {
 		super(userLoginModel, "user-login")
@@ -9,8 +8,10 @@ class UserLoginRepository extends BaseRepository {
 
 	createLocalAccount = async ({ email, password }) => {
 		return await this.create({
-			email,
-			password,
+			local: {
+				email,
+				password,
+			},
 			token: uuidv4(),
 		})
 	}
@@ -23,8 +24,11 @@ class UserLoginRepository extends BaseRepository {
 		refreshToken,
 	}) => {
 		return await this.findOneAndUpdate(
-			{ email },
+			{ "local.email": email },
 			{
+				local: {
+					email,
+				},
 				facebook: {
 					id,
 					avatar,
@@ -38,8 +42,11 @@ class UserLoginRepository extends BaseRepository {
 
 	createGoogleAccount = async ({ email, id, avatar, name, refreshToken }) => {
 		return await this.findOneAndUpdate(
-			{ email },
+			{ "local.email": email },
 			{
+				local: {
+					email,
+				},
 				google: {
 					id,
 					avatar,
@@ -54,7 +61,7 @@ class UserLoginRepository extends BaseRepository {
 	deleteRefreshToken = async (email) => {
 		return await this.findOneAndUpdate(
 			{
-				email,
+				"local.email": email,
 			},
 			{
 				refreshToken: null,
@@ -64,7 +71,7 @@ class UserLoginRepository extends BaseRepository {
 
 	findByEmail = async (email) => {
 		return await this.findOne({
-			email,
+			"local.email": email,
 		})
 	}
 
@@ -74,7 +81,7 @@ class UserLoginRepository extends BaseRepository {
 
 	updateRefreshToken = async ({ email, refreshToken }) => {
 		return await this.findOneAndUpdate(
-			{ email },
+			{ "local.email": email },
 			{
 				$set: { refreshToken },
 				$addToSet: { usedRefreshToken: "$refreshToken" },
@@ -83,22 +90,29 @@ class UserLoginRepository extends BaseRepository {
 	}
 
 	updateLoginToken = async ({ email, token }) => {
-		return await this.findOneAndUpdate({ email }, { token })
+		return await this.findOneAndUpdate({ "local.email": email }, { token })
 	}
 
 	updatePassword = async ({ email, password }) => {
-		return await this.findOneAndUpdate({ email }, { password })
+		return await this.findOneAndUpdate(
+			{ "local.email": email },
+			{ "local.password": password },
+		)
 	}
 
 	updateVerify = async (email) => {
 		return await this.findOneAndUpdate(
 			{
-				email,
+				"local.email": email,
 			},
 			{
 				verified: true,
 			},
 		)
+	}
+
+	updateUserRole = async ({ email, role }) => {
+		return this.findOneAndUpdate({ "local.email": email }, { role })
 	}
 }
 

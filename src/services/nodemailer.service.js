@@ -5,7 +5,7 @@ const { WEBSITE_URL, NODEMAILER_USER, NODEMAILER_PASS } = require("../config")
 const { logger } = require("../plugin")
 
 class NodemailerService {
-	static #sendMail = async ({ emailBody, receiver, mailSubject }) => {
+	static #sendMail = async ({ emailBody, email, mailSubject }) => {
 		let transporter = nodemailer.createTransport({
 			service: "gmail",
 			auth: {
@@ -29,7 +29,7 @@ class NodemailerService {
 
 		const mailConfig = {
 			from: "visums@ecommerce.com",
-			to: receiver.email,
+			to: email,
 			subject: mailSubject,
 			html: mail,
 		}
@@ -38,7 +38,7 @@ class NodemailerService {
 			transporter
 				.sendMail(mailConfig)
 				.then(() => {
-					logger.info(`sendMail successfully to ${receiver.email}`)
+					logger.info(`sendMail successfully to ${email}`)
 					return "success"
 				})
 				.catch((err) => {
@@ -49,16 +49,15 @@ class NodemailerService {
 		}
 	}
 
-	static sendVerifyEmail = async ({ OTP, receiver }) => {
+	static sendVerifyEmail = async ({ OTP, email }) => {
 		const encodeVerify = Buffer.from(
-			`${OTP}|${receiver.email}|verify`,
+			`${OTP}|${email}|verify`,
 			"utf-8",
 		).toString("base64")
-
 		const emailBody = {
 			body: {
 				title: "Welcome to Visums eCommerce website",
-				name: receiver.name ? receiver.name : receiver.email,
+				name: email,
 				intro: [
 					"Thank you for register. Use the following OTP to complete your Sign Up procedures.",
 					`OTP is valid for 1 days. OTP: ${OTP}`,
@@ -77,12 +76,12 @@ class NodemailerService {
 
 		await this.#sendMail({
 			emailBody,
-			receiver,
+			email,
 			mailSubject: "Verify OTP for register account",
 		})
 	}
 
-	static sendReceiptEmail = async ({ order, receiver }) => {
+	static sendReceiptEmail = async ({ order, email }) => {
 		const products = order.order_products.flatMap((order) => {
 			return order.item_products.flatMap((product) => {
 				const { name, price, quantity } = product
@@ -98,7 +97,7 @@ class NodemailerService {
 		const emailBody = {
 			body: {
 				title: "Thank You.",
-				name: receiver.name ? receiver.name : receiver.email,
+				name: email,
 				intro: "Your order has been processed successfully.",
 				outro: "You can check the status of your order and move in your dashboard: ",
 				action: {
@@ -124,21 +123,21 @@ class NodemailerService {
 
 		await this.#sendMail({
 			emailBody,
-			receiver,
+			email,
 			mailSubject: "Visums Shop order notify",
 		})
 	}
 
-	static sendForgotEmail = async ({ OTP, receiver }) => {
+	static sendForgotEmail = async ({ OTP, email }) => {
 		const encodeForgotPass = Buffer.from(
-			`${OTP}|${receiver.email}|forgot`,
+			`${OTP}|${email}|forgot`,
 			"utf-8",
 		).toString("base64")
 
 		const emailBody = {
 			body: {
 				title: "Password change request",
-				name: receiver.name ? receiver.name : receiver.email,
+				name: email,
 				intro: [
 					"We've received a password change request for your Visums Shop account.",
 					`OTP is valid for 5 minutes. OTP: ${OTP}`,
@@ -157,7 +156,7 @@ class NodemailerService {
 
 		await this.#sendMail({
 			emailBody,
-			receiver,
+			email,
 			mailSubject: "Password change request",
 		})
 	}

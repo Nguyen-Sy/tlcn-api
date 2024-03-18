@@ -20,9 +20,11 @@ class OtpService {
 		if (!userLogin) throw new BadRequestError("Invalid email")
 
 		const createOtp = await this.createOtp(email, EXPIRE_TIMES[type])
-		await nodemailerService[`send${type[0].toUpperCase() + type.slice(1)}Email`]({
+		await nodemailerService[
+			`send${type[0].toUpperCase() + type.slice(1)}Email`
+		]({
 			OTP: createOtp.token,
-			receiver: userLogin,
+			email: userLogin.local.email,
 		})
 	}
 
@@ -56,6 +58,7 @@ class OtpService {
 			})
 			return tokenPair
 		}
+		otpRepository.deleteByEmail(email)
 		return true
 	}
 }

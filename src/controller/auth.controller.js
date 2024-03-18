@@ -1,4 +1,4 @@
-const {AuthService} = require("../services")
+const { AuthService } = require("../services")
 
 class AuthController {
 	signUp = async (req, res) => {
@@ -7,14 +7,6 @@ class AuthController {
 
 	loginLocal = async (req, res) => {
 		res.sendData(await AuthService.loginLocal(req.body))
-	}
-
-	loginFacebook = async (req, res) => {
-		res.redirect("/api/v1/auth/facebook/callback")
-	}
-
-	loginGoogle = async (req, res) => {
-		res.redirect("/api/v1/auth/google/callback")
 	}
 
 	loginFacebookCallback = async (req, res) => {

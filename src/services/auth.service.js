@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const { BadRequestError } = require("../core/error.response")
 const NodeMailerService = require("./nodemailer.service")
 const OtpService = require("./otp.service")
+const UserService = require("./user.service")
 const { userLoginRepository } = require("../repository")
 const { genPairToken } = require("../utils")
 const { verifyFacebookToken, verifyGoogleToken } = require("../helper")
@@ -10,7 +11,7 @@ const { verifyFacebookToken, verifyGoogleToken } = require("../helper")
 const DAY_IN_SEC = 3600 * 24
 
 class AuthService {
-	static signUp = async ({ email, password }) => {
+	static signUp = async ({ email, password, name, avatar, phone }) => {
 		const foundUserLogin = await userLoginRepository.findByEmail(email)
 		if (foundUserLogin)
 			throw new BadRequestError("User's already registered")
@@ -21,8 +22,9 @@ class AuthService {
 		OtpService.createOtp(email, DAY_IN_SEC).then((createOtp) => {
 			NodeMailerService.sendVerifyEmail({
 				OTP: createOtp.token,
-				receiver: createdUserLogin,
+				email: createdUserLogin.local.email,
 			})
+			UserService.createUser({ email, phone, avatar, name })
 		})
 		return true
 	}
@@ -35,7 +37,7 @@ class AuthService {
 		if (!foundUserLogin.verified)
 			throw new BadRequestError("User's account has not been verified")
 
-		if (!bcrypt.compareSync(password, foundUserLogin.password))
+		if (!bcrypt.compareSync(password, foundUserLogin.local.password))
 			throw new BadRequestError("User's email/password is incorrect")
 
 		const tokenPair = genPairToken({

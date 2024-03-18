@@ -1,7 +1,14 @@
 const { userLoginRepository } = require("../repository")
 const bcrypt = require("bcrypt")
+const {
+	constant: { ROLES },
+} = require("../helper")
 
 class UserLoginService {
+	static findByEmail = async (email) => {
+		return await userLoginRepository.findByEmail(email)
+	}
+
 	static updateVerify = async (email) => {
 		return await userLoginRepository.updateVerify(email)
 	}
@@ -15,8 +22,11 @@ class UserLoginService {
 		return password
 	}
 
-	static findByEmail = async (email) => {
-		return await userLoginRepository.findByEmail(email)
+	static updateShopRole = async (email) => {
+		return await userLoginRepository.updateUserRole({
+			email,
+			role: ROLES.SHOP,
+		})
 	}
 }
 
