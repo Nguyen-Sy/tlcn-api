@@ -2,8 +2,8 @@
 
 const express = require("express")
 const otpController = require("../controller/otp.controller")
-const { asyncHandler } = require("../helper")
 const validator = require("../middleware/validate.middleware")
+const { asyncHandler } = require("../helper")
 const { otp } = require("../schema")
 const router = express.Router()
 

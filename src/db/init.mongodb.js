@@ -1,7 +1,7 @@
 "use strict"
 const mongoose = require("mongoose")
-const { DB_URL, DB_NAME } = require("../config")
 const { BadRequestError } = require("../core/error.response")
+const { DB_URL, DB_NAME } = require("../config")
 const { logger } = require("../plugin")
 
 class Database {

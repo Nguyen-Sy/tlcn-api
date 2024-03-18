@@ -1,8 +1,8 @@
-const { userLoginRepository } = require("../repository")
 const bcrypt = require("bcrypt")
 const {
 	constant: { ROLES },
 } = require("../helper")
+const { userLoginRepository } = require("../repository")
 
 class UserLoginService {
 	static findByEmail = async (email) => {

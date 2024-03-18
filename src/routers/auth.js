@@ -1,11 +1,11 @@
 "use strict"
 
-const express = require("express")
 const authController = require("../controller/auth.controller")
-const { asyncHandler } = require("../helper")
+const express = require("express")
 const validator = require("../middleware/validate.middleware")
-const { verifyRefreshToken } = require("../middleware/jwt.middleware")
+const { asyncHandler } = require("../helper")
 const { auth } = require("../schema")
+const { verifyRefreshToken } = require("../middleware/jwt.middleware")
 const router = express.Router()
 const passport = require("../services/passport.service")
 

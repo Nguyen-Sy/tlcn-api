@@ -2,8 +2,8 @@
 
 const express = require("express")
 
-const { asyncHandler } = require("../helper")
 const userController = require("../controller/user.controller")
+const { asyncHandler } = require("../helper")
 
 const onlyRoles = require("../middleware/role.middleware")
 const passport = require("../services/passport.service")

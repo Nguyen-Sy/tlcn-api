@@ -1,8 +1,8 @@
 "use strict"
-const nodemailer = require("nodemailer")
 const mailgen = require("mailgen")
-const { WEBSITE_URL, NODEMAILER_USER, NODEMAILER_PASS } = require("../config")
+const nodemailer = require("nodemailer")
 const { logger } = require("../plugin")
+const { WEBSITE_URL, NODEMAILER_USER, NODEMAILER_PASS } = require("../config")
 
 class NodemailerService {
 	static #sendMail = async ({ emailBody, email, mailSubject }) => {

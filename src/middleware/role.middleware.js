@@ -1,7 +1,7 @@
-const { BadRequestError, ForbiddenError } = require("../core/error.response")
 const {
 	constant: { ROLES },
 } = require("../helper")
+const { BadRequestError, ForbiddenError } = require("../core/error.response")
 
 const onlyRole = (roles) => {
 	return (req, res, next) => {

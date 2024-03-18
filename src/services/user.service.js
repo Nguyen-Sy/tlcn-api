@@ -1,6 +1,6 @@
-const { userRepository, shopRegisterRepository } = require("../repository")
 const UserLoginService = require("./userLogin.service")
 const { BadRequestError } = require("../core/error.response")
+const { userRepository, shopRegisterRepository } = require("../repository")
 
 class UserService {
 	static createUser = async ({ email, phone, avatar, name }) => {

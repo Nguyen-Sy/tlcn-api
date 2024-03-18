@@ -1,13 +1,11 @@
 "use strict"
 const bcrypt = require("bcrypt")
 const passport = require("passport")
-const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt")
-const { Strategy: LocalStrategy } = require("passport-local")
 const { Strategy: FacebookStrategy } = require("passport-facebook")
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20")
+const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt")
+const { Strategy: LocalStrategy } = require("passport-local")
 
-const { userLoginRepository } = require("../repository")
-const { BadRequestError } = require("../core/error.response")
 const {
 	JWT_ACCESS_SECRET,
 	GOOGLE_CLIENT_ID,
@@ -15,6 +13,8 @@ const {
 	FACEBOOK_CLIENT_ID,
 	FACEBOOK_CLIENT_SECRET,
 } = require("../config")
+const { BadRequestError } = require("../core/error.response")
+const { userLoginRepository } = require("../repository")
 
 passport.use(
 	new LocalStrategy(

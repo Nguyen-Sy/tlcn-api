@@ -1,8 +1,8 @@
 "use strict"
 const redis = require("redis")
-const { REDIS_URL } = require("../config")
 const { BadRequestError } = require("../core/error.response")
 const { logger } = require("../plugin")
+const { REDIS_URL } = require("../config")
 
 class Database {
 	#connectionTimeOut

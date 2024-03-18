@@ -1,5 +1,5 @@
-const { Types } = require("mongoose")
 const redisClient = require("../db/init.redis")
+const { Types } = require("mongoose")
 class Cache {
 	constructor(redis, name) {
 		this.redis = redis

@@ -1,9 +1,9 @@
 "use strict"
 
-const { Schema, model } = require("mongoose")
 const {
 	constant: { ROLES },
 } = require("../helper")
+const { Schema, model } = require("mongoose")
 
 const DOCUMENT_NAME = "userLogin"
 const COLLECTION_NAME = "userLogins"

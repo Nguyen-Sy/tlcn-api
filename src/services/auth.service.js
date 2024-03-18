@@ -1,11 +1,11 @@
 const bcrypt = require("bcrypt")
 
-const { BadRequestError } = require("../core/error.response")
 const NodeMailerService = require("./nodemailer.service")
 const OtpService = require("./otp.service")
 const UserService = require("./user.service")
-const { userLoginRepository } = require("../repository")
+const { BadRequestError } = require("../core/error.response")
 const { genPairToken } = require("../utils")
+const { userLoginRepository } = require("../repository")
 const { verifyFacebookToken, verifyGoogleToken } = require("../helper")
 
 const DAY_IN_SEC = 3600 * 24

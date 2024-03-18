@@ -1,5 +1,5 @@
-const { WRITE_LOG_FILE } = require("../config")
 const { createLogger, format, transports } = require("winston")
+const { WRITE_LOG_FILE } = require("../config")
 require("winston-daily-rotate-file")
 const { Console, DailyRotateFile } = transports
 const util = require("util")

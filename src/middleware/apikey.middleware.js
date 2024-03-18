@@ -1,5 +1,5 @@
-const { ForbiddenError } = require("../core/error.response")
 const ApiKeyService = require("../services/apikey.service")
+const { ForbiddenError } = require("../core/error.response")
 const API_KEY = "x-api-key"
 
 const apiKey = async (req, res, next) => {

@@ -1,8 +1,8 @@
-const { BadRequestError } = require("../core/error.response")
-const { otpRepository } = require("../repository")
-const userLoginService = require("./userLogin.service")
 const nodemailerService = require("./nodemailer.service")
+const userLoginService = require("./userLogin.service")
+const { BadRequestError } = require("../core/error.response")
 const { genPairToken } = require("../utils")
+const { otpRepository } = require("../repository")
 
 const EXPIRE_TIMES = {
 	verify: 3600 * 24, // 24h

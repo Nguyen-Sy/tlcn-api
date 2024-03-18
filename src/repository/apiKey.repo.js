@@ -1,6 +1,6 @@
 const BaseRepository = require("./base.repo")
-const { apiKeyModel } = require("../models")
 const crypto = require("node:crypto")
+const { apiKeyModel } = require("../models")
 
 class ApiKeyRepository extends BaseRepository {
 	constructor() {

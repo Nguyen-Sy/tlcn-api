@@ -1,17 +1,17 @@
 require("dotenv").config()
+const compression = require("compression")
 const express = require("express")
 const morgan = require("morgan")
 const { default: helmet } = require("helmet")
-const compression = require("compression")
 const app = express()
 const config = require("./config")
 
+const requestTracking = require("./middleware/requestTracking.middleware")
 const responseFormatter = require("./middleware/format.middleware")
 const {
 	handleError,
 	handleNotFound,
 } = require("./middleware/handleError.middleware")
-const requestTracking = require("./middleware/requestTracking.middleware")
 
 // database connection
 require("./db/init.mongodb")

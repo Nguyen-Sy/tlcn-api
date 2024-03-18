@@ -1,10 +1,10 @@
+const axios = require("axios")
+const redis = require("../db/init.redis")
 const {
 	GOOGLE_CLIENT_ID,
 	FACEBOOK_CLIENT_ID,
 	FACEBOOK_CLIENT_SECRET,
 } = require("../config")
-const axios = require("axios")
-const redis = require("../db/init.redis")
 
 const verifyFacebookToken = async (token) => {
 	const getInputKey = async (cache = true) => {

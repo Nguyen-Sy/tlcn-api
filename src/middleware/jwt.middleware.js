@@ -1,6 +1,6 @@
+const { decodeAccessToken, decodeRefreshToken } = require("../utils")
 const { ForbiddenError } = require("../core/error.response")
 const { userLoginRepository } = require("../repository")
-const { decodeAccessToken, decodeRefreshToken } = require("../utils")
 
 const verifyAccessToken = async (req, res, next) => {
 	const accessToken = req.headers["Authorization"]
