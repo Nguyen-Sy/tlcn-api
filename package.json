@@ -7,13 +7,13 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node server.js",
 		"dev": "npm run seed && nodemon server.js",
-		"seed": "node ./src/models/seed.js ",
+		"seed": "node ./src/models/seeds/index.js ",
 		"prepare": "husky"
 	},
 	"lint-staged": {
 		"**/*": "prettier --write --ignore-unknown"
 	},
-	"keywords": [],
+	"keywords": [ ],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {

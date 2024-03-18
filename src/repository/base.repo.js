@@ -44,17 +44,17 @@ class Cache {
 		}
 	}
 
-	#set = async (key, value, options = undefined) => {
-		await this.redis.set(key, JSON.stringify(value), options)
+	#set = async (key, value, mongodbOptions = undefined) => {
+		await this.redis.set(key, JSON.stringify(value), mongodbOptions)
 	}
 
-	findOneWithCache = async (filter, query, options) => {
+	findOneWithCache = async (filter, query, mongodbOptions) => {
 		const key = this.#key(filter)
 		let item = await this.#get(key)
 		if (!item && query) {
 			item = await query()
 			if (item) {
-				await this.#set(key, item, options)
+				await this.#set(key, item, mongodbOptions)
 			}
 		}
 		return item
@@ -127,13 +127,19 @@ class Repository extends Cache {
 		})
 	}
 
-	findById = async (id) => await this.model.findById(new Types.ObjectId(id))
+	deleteMany = async (filter) => {
+		return await this.model.deleteMany(filter)
+	}
 
 	find = async (
 		filter,
 		cache = false,
-		options = { ...this.#defaultOption },
+		mongodbOptions = { ...this.#defaultOption },
 	) => {
+		const _options = {
+			...this.#defaultOption,
+			...mongodbOptions,
+		}
 		const query = async () =>
 			await this.model
 				.find({
@@ -142,8 +148,8 @@ class Repository extends Cache {
 						$ne: true,
 					},
 				})
-				.select(this.#createFilter(options))
-				.sort(options.sort)
+				.select(this.#createFilter(_options))
+				.sort(mongodbOptions.sort)
 				.lean()
 		if (cache) {
 			return await this.findWithCache(filter, "_id", query)
@@ -151,12 +157,38 @@ class Repository extends Cache {
 		return await query()
 	}
 
+	findById = async (
+		id,
+		cache = false,
+		mongodbOptions = { ...this.#defaultOption },
+		redisOptions,
+	) => {
+		const _options = {
+			...this.#defaultOption,
+			...mongodbOptions,
+		}
+		const query = async () =>
+			await this.model
+				.findById(new Types.ObjectId(id))
+				.select(this.#createFilter(_options))
+				.sort(mongodbOptions.sort)
+				.lean()
+		if (cache) {
+			return await this.findOneWithCache({ _id: id }, query, redisOptions)
+		}
+		return await query()
+	}
+
 	findOne = async (
 		filter,
 		cache = false,
-		mongodOptions = { ...this.#defaultOption },
+		mongodbOptions = { ...this.#defaultOption },
 		redisOptions,
 	) => {
+		const _options = {
+			...this.#defaultOption,
+			...mongodbOptions,
+		}
 		const query = async () =>
 			await this.model
 				.findOne({
@@ -165,7 +197,7 @@ class Repository extends Cache {
 						$ne: true,
 					},
 				})
-				.select(this.#createFilter(mongodOptions))
+				.select(this.#createFilter(_options))
 				.lean()
 		if (cache) {
 			return await this.findOneWithCache(filter, query, redisOptions)
@@ -192,8 +224,16 @@ class Repository extends Cache {
 
 	page = async (
 		filter,
-		options = { ...this.#defaultOption, ...this.#defaultPaginateOption },
+		mongodbOptions = {
+			...this.#defaultOption,
+			...this.#defaultPaginateOption,
+		},
 	) => {
+		const _options = {
+			...this.#defaultOption,
+			...this.#defaultPaginateOption,
+			...mongodbOptions,
+		}
 		return await this.model
 			.find({
 				...filter,
@@ -201,10 +241,10 @@ class Repository extends Cache {
 					$ne: true,
 				},
 			})
-			.select(this.#createFilter(options))
-			.skip((options.page - 1) * options.limit)
-			.size(options.limit)
-			.sort(options.sort)
+			.select(this.#createFilter(_options))
+			.skip((_options.page - 1) * _options.limit)
+			.size(_options.limit)
+			.sort(_options.sort)
 			.lean()
 	}
 

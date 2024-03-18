@@ -7,9 +7,12 @@ const router = express.Router()
 
 router.use(apiKey)
 router.use(permission("0000"))
+
 router.use("/auth", require("./auth"))
 router.use("/otp", require("./otp"))
 router.use("/user", require("./user"))
+router.use("/category", require("./category"))
+
 router.get("/", (req, res) => {
 	res.sendData("ok")
 })
