@@ -109,11 +109,9 @@ class Repository extends Cache {
 	}
 
 	#createFilter = ({ select, unselect }) => {
-		return select.length != 0
-			? Object.fromEntries(select.map((el) => [el, 1]))
-			: unselect.length != 0
-				? Object.fromEntries(unselect.map((el) => [el, 0]))
-				: []
+		if (select) return Object.fromEntries(select.map((el) => [el, 1]))
+		if (unselect) return Object.fromEntries(select.map((el) => [el, 0]))
+		return []
 	}
 
 	create = async (object) => {
@@ -136,10 +134,6 @@ class Repository extends Cache {
 		cache = false,
 		mongodbOptions = { ...this.#defaultOption },
 	) => {
-		const _options = {
-			...this.#defaultOption,
-			...mongodbOptions,
-		}
 		const query = async () =>
 			await this.model
 				.find({
@@ -148,7 +142,7 @@ class Repository extends Cache {
 						$ne: true,
 					},
 				})
-				.select(this.#createFilter(_options))
+				.select(this.#createFilter(mongodbOptions))
 				.sort(mongodbOptions.sort)
 				.lean()
 		if (cache) {
@@ -163,14 +157,10 @@ class Repository extends Cache {
 		mongodbOptions = { ...this.#defaultOption },
 		redisOptions,
 	) => {
-		const _options = {
-			...this.#defaultOption,
-			...mongodbOptions,
-		}
 		const query = async () =>
 			await this.model
 				.findById(new Types.ObjectId(id))
-				.select(this.#createFilter(_options))
+				.select(this.#createFilter(mongodbOptions))
 				.sort(mongodbOptions.sort)
 				.lean()
 		if (cache) {
@@ -185,10 +175,6 @@ class Repository extends Cache {
 		mongodbOptions = { ...this.#defaultOption },
 		redisOptions,
 	) => {
-		const _options = {
-			...this.#defaultOption,
-			...mongodbOptions,
-		}
 		const query = async () =>
 			await this.model
 				.findOne({
@@ -197,7 +183,7 @@ class Repository extends Cache {
 						$ne: true,
 					},
 				})
-				.select(this.#createFilter(_options))
+				.select(this.#createFilter(mongodbOptions))
 				.lean()
 		if (cache) {
 			return await this.findOneWithCache(filter, query, redisOptions)
