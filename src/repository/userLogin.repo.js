@@ -72,9 +72,12 @@ class UserLoginRepository extends BaseRepository {
 	}
 
 	findByEmail = async (email) => {
-		return await this.findOne({
-			"local.email": email,
-		})
+		return await this.findOne(
+			{
+				"local.email": email,
+			},
+			true,
+		)
 	}
 
 	findByToken = async (token) => {
@@ -82,28 +85,37 @@ class UserLoginRepository extends BaseRepository {
 	}
 
 	updateRefreshToken = async ({ email, refreshToken }) => {
-		return await this.findOneAndUpdate(
+		const updatedUser = await this.findOneAndUpdate(
 			{ "local.email": email },
 			{
 				$set: { refreshToken },
 				$addToSet: { usedRefreshToken: "$refreshToken" },
 			},
 		)
+		await this.set(`${this.name}:local.email:${email}`, updatedUser)
+		return updatedUser
 	}
 
 	updateLoginToken = async ({ email, token }) => {
-		return await this.findOneAndUpdate({ "local.email": email }, { token })
+		const updatedUser = await this.findOneAndUpdate(
+			{ "local.email": email },
+			{ token },
+		)
+		await this.set(`${this.name}:local.email:${email}`, updatedUser)
+		return updatedUser
 	}
 
 	updatePassword = async ({ email, password }) => {
-		return await this.findOneAndUpdate(
+		const updatedUser = await this.findOneAndUpdate(
 			{ "local.email": email },
 			{ "local.password": password },
 		)
+		await this.set(`${this.name}:local.email:${email}`, updatedUser)
+		return updatedUser
 	}
 
 	updateVerify = async (email) => {
-		return await this.findOneAndUpdate(
+		const updatedUser = await this.findOneAndUpdate(
 			{
 				"local.email": email,
 			},
@@ -111,10 +123,17 @@ class UserLoginRepository extends BaseRepository {
 				verified: true,
 			},
 		)
+		await this.set(`${this.name}:local.email:${email}`, updatedUser)
+		return updatedUser
 	}
 
 	updateUserRole = async ({ email, role }) => {
-		return this.findOneAndUpdate({ "local.email": email }, { role })
+		const updatedUser = this.findOneAndUpdate(
+			{ "local.email": email },
+			{ role },
+		)
+		await this.set(`${this.name}:local.email:${email}`, updatedUser)
+		return updatedUser
 	}
 }
 

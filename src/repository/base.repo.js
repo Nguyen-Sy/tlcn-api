@@ -44,17 +44,17 @@ class Cache {
 		}
 	}
 
-	#set = async (key, value, mongodbOptions = undefined) => {
-		await this.redis.set(key, JSON.stringify(value), mongodbOptions)
+	set = async (key, value, redisOptions = undefined) => {
+		await this.redis.set(key, JSON.stringify(value), redisOptions)
 	}
 
-	findOneWithCache = async (filter, query, mongodbOptions) => {
+	findOneWithCache = async (filter, query, redisOptions) => {
 		const key = this.#key(filter)
 		let item = await this.#get(key)
 		if (!item && query) {
 			item = await query()
 			if (item) {
-				await this.#set(key, item, mongodbOptions)
+				await this.set(key, item, redisOptions)
 			}
 		}
 		return item

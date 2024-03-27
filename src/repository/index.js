@@ -5,4 +5,5 @@ module.exports = {
 	userLoginRepository: require("./userLogin.repo"),
 	otpRepository: require("./otp.repo"),
 	shopRegisterRepository: require("./shopRegister.repo"),
+	productRepository: require("./product.repo"),
 }

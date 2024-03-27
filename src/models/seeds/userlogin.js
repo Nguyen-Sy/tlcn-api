@@ -8,7 +8,7 @@ const seedUserLogin = async () => {
 		local: {
 			email: "admin@gmail.com",
 			password:
-				"$2b$10$7I53D3UizrFdpODzgzsfRu.lgNLxyx9Y76Av2.thoDDhvTZ/IfMQO",
+				"$2b$10$/jT3XHMsHMiof3wZfT2vH.efRcZOH3/7jGOi5RGEcsQJGGBzh40bi",
 		},
 		role: "0003",
 		verified: true,
@@ -19,7 +19,7 @@ const seedUserLogin = async () => {
 		local: {
 			email: "shop@gmail.com",
 			password:
-				"$2b$10$7I53D3UizrFdpODzgzsfRu.lgNLxyx9Y76Av2.thoDDhvTZ/IfMQO",
+				"$2b$10$/jT3XHMsHMiof3wZfT2vH.efRcZOH3/7jGOi5RGEcsQJGGBzh40bi",
 		},
 		role: "0002",
 		verified: true,
@@ -30,11 +30,11 @@ const seedUserLogin = async () => {
 		local: {
 			email: "user@gmail.com",
 			password:
-				"$2b$10$7I53D3UizrFdpODzgzsfRu.lgNLxyx9Y76Av2.thoDDhvTZ/IfMQO",
+				"$2b$10$/jT3XHMsHMiof3wZfT2vH.efRcZOH3/7jGOi5RGEcsQJGGBzh40bi",
 		},
 		role: "0001",
 		verified: true,
-		token: "38e51522-0fee-44fd-84bb-c3db5ef1c56e",
+		token: "38f51522-0fee-44fd-84bb-c3db5ef1c56e",
 	})
 }
 

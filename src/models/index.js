@@ -6,4 +6,5 @@ module.exports = {
 	templateModel: require("./template.model"),
 	otpModel: require("./otp.model"),
 	shopRegisterModel: require("./shopRegister.model"),
+	productModel: require("./products.model"),
 }

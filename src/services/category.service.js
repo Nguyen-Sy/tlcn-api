@@ -73,6 +73,10 @@ class CategoryService {
 		})
 	}
 
+	static getCategoryById = async (id) => {
+		return await categoryRepository.findById(id)
+	}
+
 	static updateCategory = async ({ id, name, description, image }) => {
 		return await categoryRepository.updateCategory({
 			id,
@@ -83,7 +87,7 @@ class CategoryService {
 	}
 
 	static deleteCategory = async (id) => {
-		const foundCategory = await categoryRepository.findById(id)
+		const foundCategory = await categoryRepository.findById(id, true)
 		if (!foundCategory) throw new BadRequestError("Invalid category id")
 
 		const width = foundCategory.right - foundCategory.left + 1

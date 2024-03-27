@@ -6,4 +6,5 @@ module.exports = {
 	PassportService: require("./passport.service"),
 	OtpService: require("./otp.service"),
 	UserLoginService: require("./userLogin.service"),
+	ProductService: require("./product.service")
 }

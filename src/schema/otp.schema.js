@@ -1,4 +1,5 @@
 const joi = require("joi")
+const { email } = require("./common.schema")
 
 const verifySchema = joi.object({
 	token: joi
@@ -17,7 +18,7 @@ const sendOtpSchema = joi.object({
 		.string()
 		.valid(...["verify", "forgot"])
 		.required(),
-	email: joi.string().email().required(),
+	email: email.required(),
 })
 
 module.exports = {
