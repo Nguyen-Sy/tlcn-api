@@ -4,6 +4,8 @@ const { isValidObjectId } = require("mongoose")
 const page = joi.number().min(1)
 const limit = joi.number().min(20)
 const search = joi.string()
+const sort = joi.string()
+const sortType = joi.string().valid("asc", "desc")
 
 const email = joi.string().email()
 const password = joi
@@ -25,4 +27,6 @@ module.exports = {
 	uri,
 	id,
 	password,
+	sort,
+	sortType,
 }

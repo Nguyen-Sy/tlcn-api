@@ -13,6 +13,7 @@ const seedProduct = async () => {
 		shop: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		variations: [],
 		rating: 4.5,
+		price: 60000,
 		isPublished: false,
 		isDeleted: false,
 	})
@@ -25,6 +26,7 @@ const seedProduct = async () => {
 		shop: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		variations: [],
 		rating: 4.5,
+		price: 80000,
 		isPublished: false,
 		isDeleted: false,
 	})
@@ -37,6 +39,7 @@ const seedProduct = async () => {
 		shop: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		variations: [],
 		rating: 4.5,
+		price: 100000,
 		isPublished: false,
 		isDeleted: false,
 	})
@@ -49,6 +52,7 @@ const seedProduct = async () => {
 		shop: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		variations: [],
 		rating: 4.5,
+		price: 60000,
 		isPublished: false,
 		isDeleted: false,
 	})
@@ -61,6 +65,7 @@ const seedProduct = async () => {
 		shop: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		variations: [],
 		rating: 4.5,
+		price: 80000,
 		isPublished: false,
 		isDeleted: false,
 	})
@@ -73,6 +78,7 @@ const seedProduct = async () => {
 		shop: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		variations: [],
 		rating: 4.5,
+		price: 100000,
 		isPublished: false,
 		isDeleted: false,
 	})

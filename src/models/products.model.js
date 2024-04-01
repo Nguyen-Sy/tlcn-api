@@ -34,6 +34,10 @@ var productSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		price: {
+			type: Number,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

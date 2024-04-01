@@ -30,6 +30,10 @@ class ProductController {
 			),
 		)
 	}
+
+	findProduct = async (req, res) => {
+		res.sendData(await ProductService.findProduct(req.query))
+	}
 }
 
 module.exports = new ProductController()

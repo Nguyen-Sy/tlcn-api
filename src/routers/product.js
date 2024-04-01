@@ -47,4 +47,11 @@ router.patch(
 	asyncHandler(productController.unpublishProduct),
 )
 router.get("/:category", asyncHandler(productController.findProductByCategory))
+router.get(
+	"/",
+	validator({
+		query: product.productQuerySchema,
+	}),
+	asyncHandler(productController.findProduct),
+)
 module.exports = router

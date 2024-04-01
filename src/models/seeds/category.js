@@ -36,7 +36,7 @@ const seedUser = async () => {
 	await categoryModel.create({
 		_id: new Types.ObjectId("66027b375d1975fcc574b96e"),
 		name: "Woman",
-		rootId: "3c855370-77d5-4d56-b8df-762a499433b7",
+		rootId: "3c855370-77d5-4d56-b8df-762a499433b8",
 		image: "https://promova.com/content/mens_clothing_1f6198db54.png",
 		description: "description for woman category",
 		parentId: null,
@@ -46,7 +46,7 @@ const seedUser = async () => {
 	await categoryModel.create({
 		_id: new Types.ObjectId("66027b375d1975fcc574b972"),
 		name: "Woman Pant",
-		rootId: "3c855370-77d5-4d56-b8df-762a499433b7",
+		rootId: "3c855370-77d5-4d56-b8df-762a499433b8",
 		image: "https://promova.com/content/mens_clothing_1f6198db54.png",
 		description: "description for woman pant category",
 		parentId: "66027b375d1975fcc574b96f",
@@ -56,7 +56,7 @@ const seedUser = async () => {
 	await categoryModel.create({
 		_id: new Types.ObjectId("66027b375d1975fcc572b972"),
 		name: "Skirt",
-		rootId: "3c855370-77d5-4d56-b8df-762a499433b7",
+		rootId: "3c855370-77d5-4d56-b8df-762a499433b8",
 		image: "https://promova.com/content/mens_clothing_1f6198db54.png",
 		description: "description for skirt category",
 		parentId: "66027b375d1975fcc574b974",

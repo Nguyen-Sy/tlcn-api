@@ -16,6 +16,7 @@ class ProductRepository extends BaseRepository {
 		attributes,
 		variations,
 		shop,
+		price,
 	}) => {
 		return await this.create({
 			name,
@@ -25,6 +26,7 @@ class ProductRepository extends BaseRepository {
 			attributes,
 			variations,
 			shop,
+			price,
 		})
 	}
 
