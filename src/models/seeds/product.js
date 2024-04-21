@@ -1,10 +1,10 @@
-const productModel = require("../products.model")
+const product = require("../products.model")
 const { Types } = require("mongoose")
 
 const seedProduct = async () => {
-	await productModel.collection.drop()
+	await product.collection.drop()
 
-	await productModel.create({
+	await product.create({
 		_id: new Types.ObjectId("65fdca23ef2e1fca31d161d7"),
 		name: "Man product 1",
 		description: "Description",
@@ -14,10 +14,10 @@ const seedProduct = async () => {
 		variations: [],
 		rating: 4.5,
 		price: 60000,
-		isPublished: false,
-		isDeleted: false,
+		is_published: false,
+		is_deleted: false,
 	})
-	await productModel.create({
+	await product.create({
 		_id: new Types.ObjectId("65fdca23ef2e1fca32d161d7"),
 		name: "Man Pant product 1",
 		description: "Description",
@@ -27,10 +27,10 @@ const seedProduct = async () => {
 		variations: [],
 		rating: 4.5,
 		price: 80000,
-		isPublished: false,
-		isDeleted: false,
+		is_published: false,
+		is_deleted: false,
 	})
-	await productModel.create({
+	await product.create({
 		_id: new Types.ObjectId("65fdca23ef2e1fca33d161d7"),
 		name: "Man short 1",
 		description: "Description",
@@ -40,10 +40,10 @@ const seedProduct = async () => {
 		variations: [],
 		rating: 4.5,
 		price: 100000,
-		isPublished: false,
-		isDeleted: false,
+		is_published: false,
+		is_deleted: false,
 	})
-	await productModel.create({
+	await product.create({
 		_id: new Types.ObjectId("65fdca23ef2e1fca31d121d7"),
 		name: "Woman product 1",
 		description: "Description",
@@ -53,10 +53,10 @@ const seedProduct = async () => {
 		variations: [],
 		rating: 4.5,
 		price: 60000,
-		isPublished: false,
-		isDeleted: false,
+		is_published: false,
+		is_deleted: false,
 	})
-	await productModel.create({
+	await product.create({
 		_id: new Types.ObjectId("65fdca23ef2e1fca32d161d1"),
 		name: "Woman Pant product 1",
 		description: "Description",
@@ -66,10 +66,10 @@ const seedProduct = async () => {
 		variations: [],
 		rating: 4.5,
 		price: 80000,
-		isPublished: false,
-		isDeleted: false,
+		is_published: false,
+		is_deleted: false,
 	})
-	await productModel.create({
+	await product.create({
 		_id: new Types.ObjectId("65fdca23ef2e1fca33d161d4"),
 		name: "Woman skirt 1",
 		description: "Description",
@@ -79,8 +79,8 @@ const seedProduct = async () => {
 		variations: [],
 		rating: 4.5,
 		price: 100000,
-		isPublished: false,
-		isDeleted: false,
+		is_published: false,
+		is_deleted: false,
 	})
 }
 module.exports = seedProduct

@@ -10,7 +10,7 @@ class UserController {
 	}
 
 	getAllRegisterShop = async (req, res) => {
-		res.sendData(await UserService.getAllRegister())
+		res.sendData(await UserService.getAllRegister(req.query))
 	}
 }
 

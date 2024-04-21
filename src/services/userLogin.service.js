@@ -4,20 +4,20 @@ const bcrypt = require("bcrypt")
 const {
 	constant: { ROLES },
 } = require("../helper")
-const { userLoginRepository } = require("../repository")
+const { userLoginRepo } = require("../repository")
 
 class UserLoginService {
 	static findByEmail = async (email) => {
-		return await userLoginRepository.findByEmail(email)
+		return await userLoginRepo.findByEmail(email)
 	}
 
 	static updateVerify = async (email) => {
-		return await userLoginRepository.updateVerify(email)
+		return await userLoginRepo.updateVerify(email)
 	}
 
 	static updateForgotPassword = async (email) => {
 		const password = Math.random().toString(36).slice(-8)
-		await userLoginRepository.updatePassword({
+		await userLoginRepo.updatePassword({
 			email,
 			password: bcrypt.hashSync(password, 10),
 		})
@@ -25,7 +25,7 @@ class UserLoginService {
 	}
 
 	static updateShopRole = async (email) => {
-		return await userLoginRepository.updateUserRole({
+		return await userLoginRepo.updateUserRole({
 			email,
 			role: ROLES.SHOP,
 		})

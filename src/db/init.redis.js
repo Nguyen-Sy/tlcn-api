@@ -9,7 +9,7 @@ class Database {
 
 	constructor() {
 		this.#connectionTimeOut = null
-		return this.connect()
+		this.connect()
 	}
 
 	connect() {
@@ -18,8 +18,8 @@ class Database {
 				url: REDIS_URL,
 			})
 			redisClient.connect()
+			this.client = redisClient
 			this.#handleEventConnection(redisClient)
-			return redisClient
 		}
 	}
 
@@ -56,5 +56,6 @@ class Database {
 	}
 }
 
-const instanceRedis = Database.getInstance()
-module.exports = instanceRedis
+// const instanceRedis = Database.getInstance()
+const instanceRedis = new Database()
+module.exports = instanceRedis.client

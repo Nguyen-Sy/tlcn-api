@@ -14,10 +14,10 @@ router.post(
 	}),
 	asyncHandler(otpController.sendVerifyOtp),
 )
-router.get(
-	"/:token",
+router.post(
+	"/verify",
 	validator({
-		params: otp.verifySchema,
+		body: otp.verifySchema,
 	}),
 	asyncHandler(otpController.verifyOtp),
 )

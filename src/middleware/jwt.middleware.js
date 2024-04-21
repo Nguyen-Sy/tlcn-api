@@ -1,24 +1,28 @@
-const { decodeAccessToken, decodeRefreshToken } = require("../utils")
-const { ForbiddenError } = require("../core/error.response")
-const { userLoginRepository } = require("../repository")
+const {
+	jwt: { decodeAccessToken, decodeRefreshToken },
+} = require("../lib")
+const { UnauthorizedError, BadRequestError } = require("../core/error.response")
+const { userLoginRepo } = require("../repository")
 
 const verifyAccessToken = async (req, res, next) => {
 	const accessToken = req.headers["Authorization"]
-	if (!accessToken) throw new ForbiddenError("Missing access token")
+	if (!accessToken) throw new UnauthorizedError("Missing access token")
 	const payload = decodeAccessToken(accessToken.split(" ")[1])
-	const userLogin = await userLoginRepository.findByEmail(payload.email)
-	if (!userLogin) throw new ForbiddenError("Invalid access token")
+	const userLogin = await userLoginRepo.findByEmail(payload.email)
+	if (!userLogin) throw new BadRequestError("Invalid access token")
 	req.user = userLogin
 	next()
 }
 
 const verifyRefreshToken = async (req, res, next) => {
-	const refreshToken = req.headers["x-rtoken-id"]
-	if (!refreshToken) throw new ForbiddenError("Missing refresh token")
-	const payload = decodeRefreshToken(refreshToken.split(" ")[1])
-	const userLogin = await userLoginRepository.findByEmail(payload.email)
-	if (!userLogin) throw new ForbiddenError("Invalid refresh token")
+	const rawRefreshToken = req.headers["x-rtoken-id"]
+	if (!rawRefreshToken) throw new UnauthorizedError("Missing refresh token")
+	const refreshToken = rawRefreshToken.split(" ")[1]
+	const payload = decodeRefreshToken(refreshToken)
+	const userLogin = await userLoginRepo.findByEmail(payload.email)
+	if (!userLogin) throw new BadRequestError("Invalid refresh token")
 	req.user = userLogin
+	req.refreshToken = refreshToken
 	next()
 }
 

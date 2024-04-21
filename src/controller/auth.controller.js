@@ -31,7 +31,7 @@ class AuthController {
 		res.sendData(
 			await AuthService.handleRefreshToken({
 				userLogin: req.user,
-				refreshToken: req.headers["x-rtoken-id"].split(" ")[1],
+				refreshToken: req.refreshToken,
 			}),
 		)
 	}

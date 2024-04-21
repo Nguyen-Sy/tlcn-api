@@ -12,7 +12,7 @@ var categorySchema = new Schema(
 			type: String,
 			required: true,
 		},
-		rootId: {
+		root_id: {
 			type: String,
 			required: true,
 		},
@@ -21,7 +21,7 @@ var categorySchema = new Schema(
 			required: true,
 		},
 		description: String,
-		parentId: {
+		parent_id: {
 			type: Schema.Types.ObjectId,
 			ref: DOCUMENT_NAME,
 		},

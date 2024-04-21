@@ -1,11 +1,12 @@
 "use strict"
 
 const BaseRepository = require("./base.repo")
-const { userLoginModel } = require("../models")
+const { userLogin } = require("../models")
 const { v4: uuidv4 } = require("uuid")
-class UserLoginRepository extends BaseRepository {
+
+class userLoginRepo extends BaseRepository {
 	constructor() {
-		super(userLoginModel, "user-login")
+		super(userLogin, "userLogin")
 	}
 
 	createLocalAccount = async ({ email, password }) => {
@@ -35,7 +36,7 @@ class UserLoginRepository extends BaseRepository {
 					id,
 					avatar,
 					name,
-					refreshToken,
+					refresh_token: refreshToken,
 				},
 				verified: true,
 			},
@@ -53,7 +54,7 @@ class UserLoginRepository extends BaseRepository {
 					id,
 					avatar,
 					name,
-					refreshToken,
+					refresh_token: refreshToken,
 				},
 				verified: true,
 			},
@@ -66,7 +67,7 @@ class UserLoginRepository extends BaseRepository {
 				"local.email": email,
 			},
 			{
-				refreshToken: null,
+				refresh_token: null,
 			},
 		)
 	}
@@ -82,18 +83,6 @@ class UserLoginRepository extends BaseRepository {
 
 	findByToken = async (token) => {
 		return await this.findOne({ token })
-	}
-
-	updateRefreshToken = async ({ email, refreshToken }) => {
-		const updatedUser = await this.findOneAndUpdate(
-			{ "local.email": email },
-			{
-				$set: { refreshToken },
-				$addToSet: { usedRefreshToken: "$refreshToken" },
-			},
-		)
-		await this.set(`${this.name}:local.email:${email}`, updatedUser)
-		return updatedUser
 	}
 
 	updateLoginToken = async ({ email, token }) => {
@@ -137,4 +126,4 @@ class UserLoginRepository extends BaseRepository {
 	}
 }
 
-module.exports = new UserLoginRepository()
+module.exports = new userLoginRepo()

@@ -1,23 +1,16 @@
 const joi = require("joi")
 const { email } = require("./common.schema")
 
+const otpType = joi.string().valid("verify", "forgot")
+
 const verifySchema = joi.object({
-	token: joi
-		.string()
-		.required()
-		.custom((value, helpers) => {
-			const decodedToken = Buffer.from(value, "base64").toString()
-			if (decodedToken.split("|").length != 3) {
-				helpers.message("Invalid verify token")
-			}
-		}),
+	type: otpType.required(),
+	email: email.required(),
+	token: joi.number().required().min(100000).max(999999),
 })
 
 const sendOtpSchema = joi.object({
-	type: joi
-		.string()
-		.valid(...["verify", "forgot"])
-		.required(),
+	type: otpType.required(),
 	email: email.required(),
 })
 

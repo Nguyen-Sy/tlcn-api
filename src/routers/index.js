@@ -13,6 +13,7 @@ router.use("/otp", require("./otp"))
 router.use("/user", require("./user"))
 router.use("/category", require("./category"))
 router.use("/product", require("./product"))
+router.use("/inventory", require("./inventory"))
 
 router.get("/", (req, res) => {
 	res.sendData("ok")

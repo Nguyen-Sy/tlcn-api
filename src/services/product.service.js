@@ -2,7 +2,7 @@
 
 const CategoryService = require("./category.service")
 const { BadRequestError } = require("../core/error.response")
-const { productRepository } = require("../repository")
+const { productRepo } = require("../repository")
 
 class ProductService {
 	static createProduct = async ({
@@ -13,12 +13,13 @@ class ProductService {
 		shop,
 		attributes,
 		variations,
+		sku_list,
 		price,
 	}) => {
 		const productCate = await CategoryService.getCategoryById(category)
 		if (!productCate) throw new BadRequestError("Invalid category")
 
-		return await productRepository.createProduct({
+		const product = await productRepo.createProduct({
 			name,
 			description,
 			images,
@@ -27,7 +28,10 @@ class ProductService {
 			attributes,
 			variations,
 			price,
+			sku_list,
 		})
+
+		return product
 	}
 
 	static updateProduct = async ({
@@ -37,37 +41,37 @@ class ProductService {
 		category,
 		shop,
 		attributes,
-		variations,
 		price,
+		variations,
 	}) => {
 		const productCate = await CategoryService.getCategoryById(category)
 		if (!productCate) throw new BadRequestError("Invalid category")
 
-		return await productRepository.updateProduct({
+		return await productRepo.updateProduct({
 			name,
 			description,
 			images,
 			category,
 			shop,
 			attributes,
-			variations,
 			price,
+			variations,
 		})
 	}
 
 	static publishProduct = async (productId) => {
-		return await productRepository.publicProduct(productId)
+		return await productRepo.publicProduct(productId)
 	}
 
 	static unpublishProduct = async (productId) => {
-		return await productRepository.unpublishProduct(productId)
+		return await productRepo.unpublishProduct(productId)
 	}
 
 	static findProduct = async ({
 		search,
 		category,
 		price,
-		sort,
+		sortField,
 		sortType,
 		page = 1,
 		limit = 20,
@@ -75,7 +79,6 @@ class ProductService {
 		let pipelines = []
 		let matchPipeline = {}
 		let sortPipeline = { createdAt: -1 }
-		console.log(search, category, price, sort, sortType)
 		if (category) {
 			const productCate = await CategoryService.getCategoryById(category)
 			if (!productCate) throw new BadRequestError("Invalid category id")
@@ -93,7 +96,17 @@ class ProductService {
 					$match: {
 						"category.left": { $gte: productCate.left },
 						"category.right": { $lte: productCate.right },
-						"category.rootId": productCate.rootId,
+						"category.root_id": productCate.root_id,
+					},
+				},
+				{
+					$project: {
+						category: 0,
+						createdAt: 0,
+						updatedAt: 0,
+						__v: 0,
+						is_deleted: 0,
+						priority_sort: 0,
 					},
 				},
 			])
@@ -103,6 +116,7 @@ class ProductService {
 				...matchPipeline,
 				$text: { $search: search },
 			}
+			sortPipeline.score = { $meta: "textScore" }
 		}
 		if (price) {
 			const priceRange = price.split(",").map((e) => e.trim())
@@ -114,15 +128,13 @@ class ProductService {
 				price: priceFilter,
 			}
 		}
-		if (sort) {
-			sortPipeline = {
-				[sort]: sortType == "asc" ? 1 : -1,
-			}
+		if (sortField) {
+			sortPipeline[sortField] = sortType == "asc" ? 1 : -1
 		}
 		pipelines.unshift({ $match: matchPipeline })
 		pipelines.push({ $sort: sortPipeline })
 		pipelines.concat([{ $skip: (page - 1) * limit }, { $limit: limit }])
-		return await productRepository.model.aggregate(pipelines)
+		return await productRepo.model.aggregate(pipelines)
 	}
 }
 

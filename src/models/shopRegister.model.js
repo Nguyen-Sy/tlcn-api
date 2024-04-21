@@ -10,7 +10,6 @@ var shopRegisterSchema = new Schema(
 		email: {
 			type: String,
 			required: true,
-			unique: true,
 			spare: true,
 		},
 		verified: {

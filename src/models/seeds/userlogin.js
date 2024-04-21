@@ -1,9 +1,9 @@
 const { Types } = require("mongoose")
-const { userLoginModel } = require("../index")
+const { userLogin } = require("../index")
 
 const seedUserLogin = async () => {
-	await userLoginModel.collection.drop()
-	await userLoginModel.create({
+	await userLogin.collection.drop()
+	await userLogin.create({
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a48"),
 		local: {
 			email: "admin@gmail.com",
@@ -14,7 +14,7 @@ const seedUserLogin = async () => {
 		verified: true,
 		token: "38e51522-0fee-44fd-84bb-c3db5ef1c56e",
 	})
-	await userLoginModel.create({
+	await userLogin.create({
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		local: {
 			email: "shop@gmail.com",
@@ -25,7 +25,7 @@ const seedUserLogin = async () => {
 		verified: true,
 		token: "31e51522-0fee-44fd-84bb-c3db5ef1c56e",
 	})
-	await userLoginModel.create({
+	await userLogin.create({
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a4c"),
 		local: {
 			email: "user@gmail.com",

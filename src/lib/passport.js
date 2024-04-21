@@ -15,7 +15,7 @@ const {
 	FACEBOOK_CLIENT_SECRET,
 } = require("../config")
 const { BadRequestError } = require("../core/error.response")
-const { userLoginRepository } = require("../repository")
+const { userLoginRepo } = require("../repository")
 
 passport.use(
 	new LocalStrategy(
@@ -25,7 +25,7 @@ passport.use(
 			session: false,
 		},
 		async (email, password, done) => {
-			const foundUserLogin = await userLoginRepository.findByEmail(email)
+			const foundUserLogin = await userLoginRepo.findByEmail(email)
 			if (foundUserLogin) {
 				if (!bcrypt.compareSync(password, foundUserLogin.password)) {
 					return done(new BadRequestError("Invalid email/password"))
@@ -45,7 +45,9 @@ passport.use(
 			algorithms: "HS256",
 		},
 		async (payload, done) => {
-			const user = await userLoginRepository.findByEmail(payload.email)
+			if (!payload.email)
+				return done(new BadRequestError("Email not found"))
+			const user = await userLoginRepo.findByEmail(payload.email)
 			if (!user || payload.exp > Date.now())
 				return done(new BadRequestError("Invalid token"))
 			return done(null, user)

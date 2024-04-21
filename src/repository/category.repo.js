@@ -1,11 +1,11 @@
 "use strict"
 
 const BaseRepository = require("./base.repo")
-const { categoryModel } = require("../models")
+const { category } = require("../models")
 
-class CategoryRepository extends BaseRepository {
+class categoryRepo extends BaseRepository {
 	constructor() {
-		super(categoryModel, "category")
+		super(category, "category")
 	}
 
 	createCategory = async ({
@@ -14,8 +14,8 @@ class CategoryRepository extends BaseRepository {
 		image,
 		right,
 		left,
-		parentId,
-		rootId,
+		parent_id,
+		root_id,
 	}) => {
 		return await this.create({
 			name,
@@ -23,8 +23,8 @@ class CategoryRepository extends BaseRepository {
 			image,
 			right,
 			left,
-			parentId,
-			rootId,
+			parent_id,
+			root_id,
 		})
 	}
 
@@ -36,4 +36,4 @@ class CategoryRepository extends BaseRepository {
 	}
 }
 
-module.exports = new CategoryRepository()
+module.exports = new categoryRepo()

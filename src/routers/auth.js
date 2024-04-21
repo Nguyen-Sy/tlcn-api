@@ -7,7 +7,7 @@ const { asyncHandler } = require("../helper")
 const { auth } = require("../schema")
 const { verifyRefreshToken } = require("../middleware/jwt.middleware")
 const router = express.Router()
-const passport = require("../services/passport.service")
+const { passport } = require("../lib")
 
 router.post(
 	"/signup",

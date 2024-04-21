@@ -6,6 +6,7 @@ const { default: helmet } = require("helmet")
 const app = express()
 const config = require("./config")
 
+const logger = require("./middleware/logger.middleware")
 const requestTracking = require("./middleware/requestTracking.middleware")
 const responseFormatter = require("./middleware/format.middleware")
 const {
@@ -26,6 +27,7 @@ app.use(
 		extended: true,
 	}),
 )
+app.use(logger)
 app.use(responseFormatter)
 app.use(requestTracking)
 // Show routes called in console during development

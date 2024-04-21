@@ -6,13 +6,13 @@ const validate = (schema = defaultSchemas) => {
 		const validateFields = ["body", "query", "params"]
 		validateFields.forEach((field) => {
 			if (schema[field]) {
-				const { error } = schema[field].validate(req[field], {
+				const { error, value } = schema[field].validate(req[field], {
 					abortEarly: false,
 				})
-				if (error) throw new BadRequestError(error)
+				if (error) throw new BadRequestError(error.message)
+				req[field] = value
 			}
 		})
-
 		next()
 	}
 }

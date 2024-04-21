@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer")
 const { logger } = require("../plugin")
 const { WEBSITE_URL, NODEMAILER_USER, NODEMAILER_PASS } = require("../config")
 
-class NodemailerService {
+class Nodemailer {
 	static #sendMail = async ({ emailBody, email, mailSubject }) => {
 		let transporter = nodemailer.createTransport({
 			service: "gmail",
@@ -163,4 +163,4 @@ class NodemailerService {
 	}
 }
 
-module.exports = NodemailerService
+module.exports = Nodemailer

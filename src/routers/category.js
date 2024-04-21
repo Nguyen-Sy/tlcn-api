@@ -8,14 +8,15 @@ const { asyncHandler } = require("../helper")
 const { category } = require("../schema")
 
 const onlyRoles = require("../middleware/role.middleware")
-const passport = require("../services/passport.service")
+const { passport } = require("../lib")
 
 const router = express.Router()
 
 router.get(
 	"/",
-	passport.authenticate("jwt", { session: false }),
-	onlyRoles(["SHOP", "USER", "ADMIN"]),
+	validator({
+		query: category.getChildCategory,
+	}),
 	asyncHandler(categoryController.getCategory),
 )
 

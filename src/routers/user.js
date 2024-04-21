@@ -6,28 +6,34 @@ const userController = require("../controller/user.controller")
 const { asyncHandler } = require("../helper")
 
 const onlyRoles = require("../middleware/role.middleware")
-const passport = require("../services/passport.service")
+const validator = require("../middleware/validate.middleware")
+const { passport } = require("../lib")
+const { user } = require("../schema")
 
 const router = express.Router()
 
+router.use(passport.authenticate("jwt", { session: false }))
+
 router.get(
 	"/register",
-	passport.authenticate("jwt", { session: false }),
+	validator({
+		query: user.getAllRegisterShopSchema,
+	}),
 	onlyRoles(["ADMIN"]),
 	asyncHandler(userController.getAllRegisterShop),
 )
 router.post(
 	"/register",
-	passport.authenticate("jwt", { session: false }),
 	onlyRoles(["USER"]),
 	asyncHandler(userController.registerShop),
 )
 router.post(
 	"/verify/:id",
-	passport.authenticate("jwt", { session: false }),
+	validator({
+		params: user.verifyRegisterShopSchema,
+	}),
 	onlyRoles(["ADMIN"]),
 	asyncHandler(userController.verifyShop),
 )
-
 
 module.exports = router

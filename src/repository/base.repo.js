@@ -99,7 +99,7 @@ class Repository extends Cache {
 		this.model = model
 		this.#defaultOption = {
 			select: [],
-			unselect: ["_v", "isDeleted"],
+			unselect: ["_v", "is_deleted"],
 			sort: "ctime",
 		}
 		this.#defaultPaginateOption = {
@@ -110,12 +110,12 @@ class Repository extends Cache {
 
 	#createFilter = ({ select, unselect }) => {
 		if (select) return Object.fromEntries(select.map((el) => [el, 1]))
-		if (unselect) return Object.fromEntries(select.map((el) => [el, 0]))
+		if (unselect) return Object.fromEntries(unselect.map((el) => [el, 0]))
 		return []
 	}
 
 	create = async (object) => {
-		return await this.model.create(object)
+		return JSON.parse(JSON.stringify(await this.model.create(object)))
 	}
 
 	insertMany = async (objects) => {
@@ -138,7 +138,7 @@ class Repository extends Cache {
 			await this.model
 				.find({
 					...filter,
-					isDeleted: {
+					is_deleted: {
 						$ne: true,
 					},
 				})
@@ -179,7 +179,7 @@ class Repository extends Cache {
 			await this.model
 				.findOne({
 					...filter,
-					isDeleted: {
+					is_deleted: {
 						$ne: true,
 					},
 				})
@@ -200,7 +200,7 @@ class Repository extends Cache {
 
 	findOneAndSoftDelete = async (filter) => {
 		return await this.model.findOneAndUpdate(filter, {
-			isDeleted: true,
+			is_deleted: true,
 		})
 	}
 
@@ -223,7 +223,7 @@ class Repository extends Cache {
 		return await this.model
 			.find({
 				...filter,
-				isDeleted: {
+				is_deleted: {
 					$ne: true,
 				},
 			})

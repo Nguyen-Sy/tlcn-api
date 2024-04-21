@@ -1,5 +1,5 @@
 const { BadRequestError } = require("../core/error.response")
-const { categoryRepository } = require("../repository")
+const { categoryRepo } = require("../repository")
 const { v4: uuidv4 } = require("uuid")
 
 class CategoryService {
@@ -7,14 +7,14 @@ class CategoryService {
 		name,
 		description,
 		image,
-		parentId = null,
+		parent_id = null,
 	}) => {
 		let right
-		let rootId = uuidv4()
-		if (parentId) {
-			const parentCategory = await categoryRepository.findById(parentId)
+		let root_id = uuidv4()
+		if (parent_id) {
+			const parentCategory = await categoryRepo.findById(parent_id)
 			if (!parentCategory) throw new BadRequestError("Not found category")
-			await categoryRepository.updateMany(
+			await categoryRepo.updateMany(
 				{
 					right: { $gte: parentCategory.right },
 				},
@@ -22,7 +22,7 @@ class CategoryService {
 					$inc: { right: 2 },
 				},
 			)
-			await categoryRepository.updateMany(
+			await categoryRepo.updateMany(
 				{
 					left: { $gt: parentCategory.right },
 				},
@@ -31,54 +31,50 @@ class CategoryService {
 				},
 			)
 			right = parentCategory.right
-			rootId = parentCategory.rootId
+			root_id = parentCategory.root_id
 		} else {
-			const maxRight = await categoryRepository.findById(
-				parentId,
-				false,
-				{
-					select: ["right"],
-					sort: "-right",
-				},
-			)
+			const maxRight = await categoryRepo.findById(parent_id, false, {
+				select: ["right"],
+				sort: "-right",
+			})
 			right = maxRight ? maxRight + 1 : 1
 		}
-		return await categoryRepository.createCategory({
+		return await categoryRepo.createCategory({
 			name,
 			description,
 			image,
 			left: right,
 			right: right + 1,
-			parentId,
-			rootId,
+			parent_id,
+			root_id,
 		})
 	}
 
-	static getChildCategory = async (parentId = null) => {
+	static getChildCategory = async (parent_id = null) => {
 		let query
-		if (parentId) {
-			const parentCate = await categoryRepository.findById(parentId)
+		if (parent_id) {
+			const parentCate = await categoryRepo.findById(parent_id)
 			if (!parentCate) throw new BadRequestError("Invalid category id")
 			query = {
 				left: { $gt: parentCate.left },
 				right: { $lte: parentCate.right },
-				rootId: parentCate.rootId,
+				root_id: parentCate.root_id,
 			}
 		} else {
-			query = { parentId: null }
+			query = { parent_id: null }
 		}
-		return await categoryRepository.find(query, false, {
-			unselect: ["left", "right", "rootId"],
+		return await categoryRepo.find(query, false, {
+			unselect: ["left", "right", "root_id"],
 			sort: "left",
 		})
 	}
 
 	static getCategoryById = async (id) => {
-		return await categoryRepository.findById(id)
+		return await categoryRepo.findById(id)
 	}
 
 	static updateCategory = async ({ id, name, description, image }) => {
-		return await categoryRepository.updateCategory({
+		return await categoryRepo.updateCategory({
 			id,
 			name,
 			description,
@@ -87,23 +83,23 @@ class CategoryService {
 	}
 
 	static deleteCategory = async (id) => {
-		const foundCategory = await categoryRepository.findById(id, true)
+		const foundCategory = await categoryRepo.findById(id, true)
 		if (!foundCategory) throw new BadRequestError("Invalid category id")
 
 		const width = foundCategory.right - foundCategory.left + 1
-		await categoryRepository.deleteMany({
-			rootId: foundCategory.rootId,
+		await categoryRepo.deleteMany({
+			root_id: foundCategory.root_id,
 			left: { $gte: foundCategory.left },
 			right: { $lte: foundCategory.right },
 		})
 
-		await categoryRepository.updateMany(
+		await categoryRepo.updateMany(
 			{
 				right: { $gt: foundCategory.right },
 			},
 			{ $inc: { right: -width } },
 		)
-		await categoryRepository.updateMany(
+		await categoryRepo.updateMany(
 			{
 				left: { $gt: foundCategory.right },
 			},

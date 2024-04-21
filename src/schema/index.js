@@ -3,4 +3,6 @@ module.exports = {
 	otp: require("./otp.schema"),
 	category: require("./category.schema"),
 	product: require("./product.schema"),
+	user: require("./user.schema"),
+	inventory: require("./inventory.schema"),
 }

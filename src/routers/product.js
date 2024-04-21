@@ -5,13 +5,22 @@ const onlyRole = require("../middleware/role.middleware")
 const productController = require("../controller/product.controller")
 const validator = require("../middleware/validate.middleware")
 const { asyncHandler } = require("../helper")
-const { PassportService: passport } = require("../services")
+const { passport } = require("../lib")
 const { product } = require("../schema")
 const router = express.Router()
 
+router.get("/:category", asyncHandler(productController.findProductByCategory))
+router.get(
+	"/",
+	validator({
+		query: product.productQuerySchema,
+	}),
+	asyncHandler(productController.findProduct),
+)
+
+router.use(passport.authenticate("jwt", { session: false }))
 router.post(
 	"/",
-	passport.authenticate("jwt", { session: false }),
 	validator({
 		body: product.createProductSchema,
 	}),
@@ -20,7 +29,6 @@ router.post(
 )
 router.put(
 	"/:id",
-	passport.authenticate("jwt", { session: false }),
 	validator({
 		params: product.productIdSchema,
 		body: product.updateProductSchema,
@@ -30,7 +38,6 @@ router.put(
 )
 router.patch(
 	"/publish/:id",
-	passport.authenticate("jwt", { session: false }),
 	validator({
 		params: product.productIdSchema,
 	}),
@@ -39,19 +46,11 @@ router.patch(
 )
 router.patch(
 	"/unpublish/:id",
-	passport.authenticate("jwt", { session: false }),
 	validator({
 		params: product.productIdSchema,
 	}),
 	onlyRole(["SHOP", "ADMIN"]),
 	asyncHandler(productController.unpublishProduct),
 )
-router.get("/:category", asyncHandler(productController.findProductByCategory))
-router.get(
-	"/",
-	validator({
-		query: product.productQuerySchema,
-	}),
-	asyncHandler(productController.findProduct),
-)
+
 module.exports = router

@@ -10,7 +10,7 @@ const createCategory = joi.object().keys({
 	name: categoryName.required(),
 	description: categoryDescription,
 	image: categoryImage.required(),
-	parentId: categoryParentId,
+	parent_id: categoryParentId,
 })
 
 const updateCategory = joi.object({
@@ -19,7 +19,12 @@ const updateCategory = joi.object({
 	image: categoryImage,
 })
 
+const getChildCategory = joi.object({
+	parent_id: categoryParentId,
+})
+
 module.exports = {
 	createCategory,
 	updateCategory,
+	getChildCategory,
 }

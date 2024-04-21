@@ -36,8 +36,8 @@ var userLoginSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
-		refreshToken: String,
-		refreshTokenUsed: [],
+		refresh_token: String,
+		refresh_tokens_used: [String],
 		token: {
 			type: String,
 			spare: true,

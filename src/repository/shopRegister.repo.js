@@ -1,19 +1,22 @@
 "use strict"
 
 const BaseRepository = require("./base.repo")
-const { shopRegisterModel } = require("../models")
+const { isNull } = require("lodash")
+const { shopRegister } = require("../models")
 
-class OtpRepository extends BaseRepository {
+class otpRepo extends BaseRepository {
 	constructor() {
-		super(shopRegisterModel, "shop-register-history")
+		super(shopRegister, "shopRegister")
 	}
 
 	createShopRegister = async (email) => {
 		return await this.create({ email })
 	}
 
-	getAllShopRegister = async () => {
-		return await this.find({})
+	getAllShopRegister = async (verified = null) => {
+		const filter = {}
+		if (!isNull(verified)) filter.verified = verified
+		return await this.find(filter)
 	}
 
 	verifyShopRegister = async (id) => {
@@ -28,4 +31,4 @@ class OtpRepository extends BaseRepository {
 	}
 }
 
-module.exports = new OtpRepository()
+module.exports = new otpRepo()

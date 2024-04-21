@@ -1,11 +1,12 @@
 "use strict"
 
 const BaseRepository = require("./base.repo")
-const { productModel } = require("../models")
+const productSkuRepo = require("./productSku.repo")
+const { product } = require("../models")
 
-class ProductRepository extends BaseRepository {
+class productRepo extends BaseRepository {
 	constructor() {
-		super(productModel, "product")
+		super(product, "product")
 	}
 
 	createProduct = async ({
@@ -14,20 +15,38 @@ class ProductRepository extends BaseRepository {
 		images,
 		category,
 		attributes,
-		variations,
 		shop,
 		price,
+		variations,
+		sku_list,
 	}) => {
-		return await this.create({
+		price = sku_list[0].price
+		sku_list.forEach(({ is_default = false, price: skuPrice }) => {
+			if (is_default) price = skuPrice
+		})
+
+		const product = await this.create({
 			name,
 			description,
 			images,
 			category,
 			attributes,
-			variations,
 			shop,
 			price,
+			variations,
 		})
+
+		sku_list = await Promise.all(
+			sku_list.map(({ tier_idx, is_default = false, price }) => {
+				return productSkuRepo.createProductSku({
+					tier_idx,
+					is_default,
+					price,
+					sku_id: `${product._id}-${shop}-${tier_idx.join(".")}`,
+				})
+			}),
+		)
+		return { ...product, sku_list }
 	}
 
 	updateProduct = async ({
@@ -46,11 +65,11 @@ class ProductRepository extends BaseRepository {
 	}
 
 	publishProduct = async (id) => {
-		return await this.findOneAndUpdate({ _id: id }, { isPublished: true })
+		return await this.findOneAndUpdate({ _id: id }, { is_published: true })
 	}
 
 	unpublishProduct = async (id) => {
-		return await this.findOneAndUpdate({ _id: id }, { isPublished: false })
+		return await this.findOneAndUpdate({ _id: id }, { is_published: false })
 	}
 
 	deleteProduct = async (id) => {
@@ -66,30 +85,8 @@ class ProductRepository extends BaseRepository {
 		)
 	}
 
-	findProductByCategory = async (category, sort) => {
-		return await this.model.aggregate([
-			{
-				$lookup: {
-					from: "categories",
-					localField: "category",
-					foreignField: "_id",
-					as: "category",
-				},
-			},
-			{ $unwind: "$category" },
-			{
-				$match: {
-					"category.left": { $gte: category.left },
-					"category.right": { $lte: category.right },
-					"category.rootId": category.rootId,
-				},
-			},
-			{ $sort: { [sort]: 1 } },
-		])
-	}
-
 	findAllProducts = async ({ page = 1, limit = 20, sort = "ctime" }) => {
-		return await this.page({ isPublished: true }, { page, limit, sort })
+		return await this.page({ is_published: true }, { page, limit, sort })
 	}
 
 	findUnpublishProducts = async (shop, { page, limit, sort }) => {
@@ -107,7 +104,7 @@ class ProductRepository extends BaseRepository {
 			.find(
 				{
 					$text: RegExp(search),
-					isPublished: true,
+					is_published: true,
 				},
 				{ score: { $meta: "textScore" } },
 			)
@@ -116,4 +113,4 @@ class ProductRepository extends BaseRepository {
 	}
 }
 
-module.exports = new ProductRepository()
+module.exports = new productRepo()

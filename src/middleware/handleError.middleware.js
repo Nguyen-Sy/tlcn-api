@@ -1,4 +1,5 @@
 const { logger } = require("../plugin")
+const { NODE_ENV } = require("../config")
 
 const handleNotFound = (req, res, next) => {
 	const error = new Error("Not found")
@@ -8,12 +9,17 @@ const handleNotFound = (req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 const handleError = (error, req, res, next) => {
+	const statusCode = error.status ? error.status : 500
+
 	logger.error(error.message, {
 		requestId: req.requestId,
 		context: error.context,
 	})
 
-	const statusCode = error.status ? error.status : 500
+	if (statusCode == 500 && NODE_ENV == "DEV") {
+		console.log(error.stack)
+	}
+
 	return res.status(statusCode).json({
 		status: "Error",
 		code: statusCode,

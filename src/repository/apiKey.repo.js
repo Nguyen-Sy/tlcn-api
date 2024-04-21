@@ -2,11 +2,11 @@
 
 const BaseRepository = require("./base.repo")
 const crypto = require("node:crypto")
-const { apiKeyModel } = require("../models")
+const { apiKey } = require("../models")
 
-class ApiKeyRepository extends BaseRepository {
+class apiKeyRepo extends BaseRepository {
 	constructor() {
-		super(apiKeyModel, "api-key")
+		super(apiKey, "apiKey")
 	}
 
 	createApiKey = async (permission) => {
@@ -27,4 +27,4 @@ class ApiKeyRepository extends BaseRepository {
 	}
 }
 
-module.exports = new ApiKeyRepository()
+module.exports = new apiKeyRepo()

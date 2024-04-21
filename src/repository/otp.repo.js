@@ -1,29 +1,35 @@
 "use strict"
 
 const BaseRepository = require("./base.repo")
-const { otpModel } = require("../models")
+const {
+	constant: { EXPIRE_TIMES },
+} = require("../helper")
+const { otp } = require("../models")
 
-class OtpRepository extends BaseRepository {
+class otpRepo extends BaseRepository {
 	constructor() {
-		super(otpModel, "otp")
+		super(otp, "otp")
 	}
 
 	createOtp = async (email, expireTime = 60) => {
 		return await this.create({
 			token: Math.floor(100000 + Math.random() * 900000),
 			email,
-			expiredAt: expireTime,
+			expired_at: new Date(Date.now() + expireTime * 1000),
 		})
 	}
 
-	findOtpByEmail = async (email) => {
-		return await this.findOne({ email })
+	findOtpByEmail = async (email, type = "verify") => {
+		return await this.findOne({
+			email,
+			createdAt: { $gte: Date.now() - EXPIRE_TIMES[type] * 1000 },
+		})
 	}
 
 	updateWrongTimes = async (email) => {
 		return await this.findOneAndUpdate(
 			{ email },
-			{ $inc: { wrongTimes: 1 } },
+			{ $inc: { wrong_times: 1 } },
 		)
 	}
 
@@ -32,4 +38,4 @@ class OtpRepository extends BaseRepository {
 	}
 }
 
-module.exports = new OtpRepository()
+module.exports = new otpRepo()

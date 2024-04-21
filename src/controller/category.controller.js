@@ -6,7 +6,9 @@ class CategoryController {
 	}
 
 	getCategory = async (req, res) => {
-		res.sendData(await CategoryService.getChildCategory(req.query.parentId))
+		res.sendData(
+			await CategoryService.getChildCategory(req.query.parent_id),
+		)
 	}
 
 	updateCategory = async (req, res) => {

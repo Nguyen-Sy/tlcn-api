@@ -1,7 +1,10 @@
 "use strict"
 
-const { default: slugify } = require("slugify")
-const { Schema, model } = require("mongoose")
+const mongoose = require("mongoose")
+const slug = require("mongoose-slug-updater")
+const { Schema, model } = mongoose
+
+mongoose.plugin(slug)
 
 const DOCUMENT_NAME = "product"
 const COLLECTION_NAME = "products"
@@ -19,24 +22,28 @@ var productSchema = new Schema(
 		images: [String],
 		category: { type: Schema.Types.ObjectId, ref: "category" },
 		shop: { type: Schema.Types.ObjectId, ref: "user" },
-		slug: String,
+		slug: { type: String, slug: "name", unique: true },
 		attributes: Schema.Types.Mixed,
-		variations: [Object],
 		rating: {
 			type: Number,
 			default: 4.5,
 		},
-		isPublished: {
+		is_published: {
 			type: Boolean,
 			default: false,
 		},
-		isDeleted: {
+		is_deleted: {
 			type: Boolean,
 			default: false,
 		},
 		price: {
 			type: Number,
 			required: true,
+		},
+		variations: [Object],
+		priority_sort: {
+			type: Number,
+			default: 0,
 		},
 	},
 	{
@@ -46,14 +53,5 @@ var productSchema = new Schema(
 )
 
 productSchema.index({ name: "text", description: "text" })
-
-productSchema.pre("save", function (next) {
-	if (!this.isModified("name")) {
-		return next()
-	}
-
-	this.slug = slugify(this.name, { lower: true, trim: true })
-	next()
-})
 
 module.exports = model(DOCUMENT_NAME, productSchema)

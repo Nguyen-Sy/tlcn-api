@@ -1,11 +1,11 @@
 "use strict"
 
 const BaseRepository = require("./base.repo")
-const { userModel } = require("../models")
+const { user } = require("../models")
 
-class UserRepository extends BaseRepository {
+class userRepo extends BaseRepository {
 	constructor() {
-		super(userModel, "user")
+		super(user, "user")
 	}
 
 	createUser = async ({ email, phone, name, avatar }) => {
@@ -22,4 +22,4 @@ class UserRepository extends BaseRepository {
 	}
 }
 
-module.exports = new UserRepository()
+module.exports = new userRepo()

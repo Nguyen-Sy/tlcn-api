@@ -7,8 +7,7 @@ class OtpController {
 	}
 
 	verifyOtp = async (req, res) => {
-		
-		res.sendData(await OtpService.verifyOtp(req.params.token))
+		res.sendData(await OtpService.verifyOtp(req.body))
 	}
 }
 

@@ -1,52 +1,67 @@
 "use strict"
 
-const nodemailerService = require("./nodemailer.service")
+const redisClient = require("../db/init.redis")
 const userLoginService = require("./userLogin.service")
+const {
+	constant: { EXPIRE_TIMES },
+} = require("../helper")
+const {
+	jwt: { genPairToken },
+} = require("../lib")
 const { BadRequestError } = require("../core/error.response")
-const { genPairToken } = require("../utils")
-const { otpRepository } = require("../repository")
+const { nodemailer } = require("../lib")
+const { otpRepo } = require("../repository")
 
-const EXPIRE_TIMES = {
-	verify: 3600 * 24, // 24h
-	forgot: 3600, // 1h
-}
 class OtpService {
 	static createOtp = async (email, expireTime) => {
-		return await otpRepository.createOtp(email, expireTime)
+		return await otpRepo.createOtp(email, expireTime)
 	}
 
 	static sendVerifyOtp = async ({ email, type }) => {
+		const numberOfEmailSendKey = `sendVerifyOtp:${email}`
+		const numberOfEmailSend = parseInt(
+			await redisClient.get(numberOfEmailSendKey),
+		)
+
+		if (numberOfEmailSend >= 3) {
+			throw new BadRequestError("Exceed send verify email times")
+		} else {
+			await redisClient.set(
+				numberOfEmailSendKey,
+				numberOfEmailSend ? numberOfEmailSend + 1 : 1,
+				{
+					EX: 60,
+				},
+			)
+		}
+
 		if (!Object.keys(EXPIRE_TIMES).includes(type))
 			throw new BadRequestError("Invalid otp type")
+
 		const userLogin = await userLoginService.findByEmail(email)
 		if (!userLogin) throw new BadRequestError("Invalid email")
 
 		const createOtp = await this.createOtp(email, EXPIRE_TIMES[type])
-		await nodemailerService[
-			`send${type[0].toUpperCase() + type.slice(1)}Email`
-		]({
+		await nodemailer[`send${type[0].toUpperCase() + type.slice(1)}Email`]({
 			OTP: createOtp.token,
 			email: userLogin.local.email,
 		})
 	}
 
-	static verifyOtp = async (_token) => {
-		const [token, email, type] = Buffer.from(_token, "base64")
-			.toString()
-			.split("|")
+	static verifyOtp = async ({ token, email, type }) => {
 		if (!Object.keys(EXPIRE_TIMES).includes(type))
 			throw new BadRequestError("Invalid otp type")
 
-		const otp = await otpRepository.findOtpByEmail(email)
+		const otp = await otpRepo.findOtpByEmail(email, type)
 		if (!otp) throw new BadRequestError("Otp not found")
 		if (otp.token != token) {
-			if (otp.wrongTimes + 1 < 3) {
-				await otpRepository.updateWrongTimes(email)
+			if (otp.wrong_times + 1 < 3) {
+				await otpRepo.updateWrongTimes(email)
 			} else {
-				await otpRepository.deleteByEmail({ email })
+				await otpRepo.deleteByEmail({ email })
 			}
 			throw new BadRequestError(
-				`Otp code is invalid, remaining try: ${2 - otp.wrongTimes}`,
+				`Otp code is invalid, remaining try: ${2 - otp.wrong_times}`,
 			)
 		}
 
@@ -60,7 +75,7 @@ class OtpService {
 			})
 			return tokenPair
 		}
-		otpRepository.deleteByEmail(email)
+		otpRepo.deleteByEmail(email)
 		return true
 	}
 }
