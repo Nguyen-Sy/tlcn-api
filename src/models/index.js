@@ -1,11 +1,12 @@
 module.exports = {
 	apiKey: require("./apikey.model"),
+	cart: require("./cart.model"),
 	category: require("./category.model"),
-	user: require("./user.model"),
-	userLogin: require("./userLogin.model"),
+	inventory: require("./inventory.model"),
 	otp: require("./otp.model"),
-	shopRegister: require("./shopRegister.model"),
 	product: require("./products.model"),
 	productSku: require("./productSku.model"),
-	inventory: require("./inventory.model"),
+	shopRegister: require("./shopRegister.model"),
+	user: require("./user.model"),
+	userLogin: require("./userLogin.model"),
 }

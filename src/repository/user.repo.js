@@ -8,8 +8,9 @@ class userRepo extends BaseRepository {
 		super(user, "user")
 	}
 
-	createUser = async ({ email, phone, name, avatar }) => {
+	createUser = async ({ email, phone, name, avatar, id: _id }) => {
 		return this.create({
+			_id,
 			email,
 			phone,
 			name,

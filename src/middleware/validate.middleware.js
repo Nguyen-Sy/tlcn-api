@@ -9,7 +9,7 @@ const validate = (schema = defaultSchemas) => {
 				const { error, value } = schema[field].validate(req[field], {
 					abortEarly: false,
 				})
-				if (error) throw new BadRequestError(error.message)
+				if (error) next(new BadRequestError(error.message))
 				req[field] = value
 			}
 		})

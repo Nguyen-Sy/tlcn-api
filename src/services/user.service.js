@@ -5,8 +5,8 @@ const { BadRequestError } = require("../core/error.response")
 const { userRepo, shopRegisterRepo } = require("../repository")
 
 class UserService {
-	static createUser = async ({ email, phone, avatar, name }) => {
-		return await userRepo.createUser({ email, phone, avatar, name })
+	static createUser = async ({ email, phone, avatar, name, id }) => {
+		return await userRepo.createUser({ email, phone, avatar, name, id })
 	}
 
 	static getAllRegister = async ({ verified }) => {

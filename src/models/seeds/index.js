@@ -4,6 +4,7 @@ const redis = require("../../db/init.redis")
 const { logger } = require("../../plugin")
 
 const seedApiKey = require("./apikey")
+const seedCart = require("./cart")
 const seedCategory = require("./category")
 const seedProduct = require("./product")
 const seedUser = require("./user")
@@ -16,6 +17,7 @@ const seed = async () => {
 	await seedUser()
 	await seedCategory()
 	await seedProduct()
+	await seedCart()
 }
 
 seed()

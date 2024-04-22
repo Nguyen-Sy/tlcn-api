@@ -49,7 +49,6 @@ class InventoryService {
 			if (priceRange[1] !== "")
 				filter["price"]["$lte"] = Number(priceRange[1])
 		}
-		console.log(filter)
 		const productSkuInventories = await inventoryRepo.find(filter)
 		return {
 			items: productSkuInventories.slice(

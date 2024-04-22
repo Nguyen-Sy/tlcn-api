@@ -1,11 +1,12 @@
 module.exports = {
 	apiKeyRepo: require("./apiKey.repo"),
+	cartRepo: require("./cart.repo"),
 	categoryRepo: require("./category.repo"),
-	userRepo: require("./user.repo"),
-	userLoginRepo: require("./userLogin.repo"),
+	inventoryRepo: require("./inventory.repo"),
 	otpRepo: require("./otp.repo"),
-	shopRegisterRepo: require("./shopRegister.repo"),
 	productRepo: require("./product.repo"),
 	productSkuRepo: require("./productSku.repo"),
-	inventoryRepo: require("./inventory.repo"),
+	userRepo: require("./user.repo"),
+	userLoginRepo: require("./userLogin.repo"),
+	shopRegisterRepo: require("./shopRegister.repo"),
 }

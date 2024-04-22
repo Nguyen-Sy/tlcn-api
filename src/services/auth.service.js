@@ -28,7 +28,13 @@ class AuthService {
 				OTP: createOtp.token,
 				email: createdUserLogin.local.email,
 			})
-			UserService.createUser({ email, phone, avatar, name })
+			UserService.createUser({
+				email,
+				phone,
+				avatar,
+				name,
+				id: createdUserLogin._id,
+			})
 		})
 		return true
 	}

@@ -27,6 +27,7 @@ var inventorySchema = new Schema(
 		status: {
 			type: String,
 			enum: ["in_used", "out_of_stock", "pending"],
+			default: "pending",
 		},
 	},
 	{

@@ -1,7 +1,8 @@
 "use strict"
 
+const CartService = require("./cart.service")
 const redisClient = require("../db/init.redis")
-const userLoginService = require("./userLogin.service")
+const UserLoginService = require("./userLogin.service")
 const {
 	constant: { EXPIRE_TIMES },
 } = require("../helper")
@@ -38,7 +39,7 @@ class OtpService {
 		if (!Object.keys(EXPIRE_TIMES).includes(type))
 			throw new BadRequestError("Invalid otp type")
 
-		const userLogin = await userLoginService.findByEmail(email)
+		const userLogin = await UserLoginService.findByEmail(email)
 		if (!userLogin) throw new BadRequestError("Invalid email")
 
 		const createOtp = await this.createOtp(email, EXPIRE_TIMES[type])
@@ -66,9 +67,10 @@ class OtpService {
 		}
 
 		if (type == "verify") {
-			await userLoginService.updateVerify(email)
+			const updatedUserLogin = await UserLoginService.updateVerify(email)
+			await CartService.createCart(updatedUserLogin._id)
 		} else {
-			const userLogin = await userLoginService.findByEmail(email)
+			const userLogin = await UserLoginService.findByEmail(email)
 			const tokenPair = genPairToken({
 				id: userLogin._id,
 				email,
