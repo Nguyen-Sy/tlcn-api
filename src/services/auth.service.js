@@ -16,8 +16,8 @@ const DAY_IN_SEC = 3600 * 24
 
 class AuthService {
 	static signUp = async ({ email, password, name, avatar, phone }) => {
-		const foundUserLogin = await userLoginRepo.findByEmail(email)
-		if (foundUserLogin)
+		const existedUserLogin = await userLoginRepo.findByEmail(email)
+		if (existedUserLogin)
 			throw new BadRequestError("User's already registered")
 		const createdUserLogin = await userLoginRepo.createLocalAccount({
 			email,
@@ -40,30 +40,30 @@ class AuthService {
 	}
 
 	static loginLocal = async ({ email, password }) => {
-		const foundUserLogin = await userLoginRepo.findByEmail(email)
-		if (!foundUserLogin)
+		const existedUserLogin = await userLoginRepo.findByEmail(email)
+		if (!existedUserLogin)
 			throw new BadRequestError("User's email/password is incorrect")
 
-		if (!foundUserLogin.verified)
+		if (!existedUserLogin.verified)
 			throw new BadRequestError("User's account has not been verified")
 
-		if (!bcrypt.compareSync(password, foundUserLogin.local.password))
+		if (!bcrypt.compareSync(password, existedUserLogin.local.password))
 			throw new BadRequestError("User's email/password is incorrect")
 
 		const pairToken = genPairToken({
-			id: foundUserLogin._id,
-			email: foundUserLogin.email,
+			id: existedUserLogin._id,
+			email: existedUserLogin.email,
 		})
 		const updatedRefreshTokensUsed = [
 			pairToken.refreshToken,
-			...foundUserLogin.refresh_tokens_used,
+			...existedUserLogin.refresh_tokens_used,
 		]
-		if (foundUserLogin.refresh_tokens_used.length >= 15)
+		if (existedUserLogin.refresh_tokens_used.length >= 15)
 			updatedRefreshTokensUsed.pop()
 
 		userLoginRepo.findOneAndUpdate(
 			{
-				_id: foundUserLogin._id,
+				_id: existedUserLogin._id,
 			},
 			{
 				refresh_token: pairToken.refreshToken,
@@ -79,8 +79,8 @@ class AuthService {
 		accessToken,
 		profile: { email, name, avatar, id },
 	}) => {
-		const foundUserLogin = await userLoginRepo.findByEmail(email)
-		if (!foundUserLogin) {
+		const existedUserLogin = await userLoginRepo.findByEmail(email)
+		if (!existedUserLogin) {
 			await userLoginRepo.createFacebookAccount({
 				email,
 				id,
@@ -101,8 +101,8 @@ class AuthService {
 		accessToken,
 		profile: { email, name, avatar, id },
 	}) => {
-		const foundUserLogin = await userLoginRepo.findByEmail(email)
-		if (!foundUserLogin) {
+		const existedUserLogin = await userLoginRepo.findByEmail(email)
+		if (!existedUserLogin) {
 			await userLoginRepo.createGoogleAccount({
 				email,
 				id,
@@ -119,8 +119,8 @@ class AuthService {
 	}
 
 	static loginSocialSuccess = async ({ loginType, token }) => {
-		const foundUserLogin = await userLoginRepo.findByToken(token)
-		if (!foundUserLogin) throw new BadRequestError("Invalid login token")
+		const existedUserLogin = await userLoginRepo.findByToken(token)
+		if (!existedUserLogin) throw new BadRequestError("Invalid login token")
 		let verified = false
 		switch (loginType) {
 			case "facebook":
@@ -134,8 +134,8 @@ class AuthService {
 		}
 		if (!verified) throw new BadRequestError("Invalid login token")
 		const tokenPair = genPairToken({
-			id: foundUserLogin._id,
-			email: foundUserLogin.email,
+			id: existedUserLogin._id,
+			email: existedUserLogin.email,
 		})
 		return tokenPair
 	}

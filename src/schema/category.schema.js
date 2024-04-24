@@ -6,25 +6,30 @@ const categoryDescription = joi.string()
 const categoryImage = uri
 const categoryParentId = id
 
-const createCategory = joi.object().keys({
+const createCategorySchema = joi.object().keys({
 	name: categoryName.required(),
 	description: categoryDescription,
 	image: categoryImage.required(),
 	parent_id: categoryParentId,
 })
 
-const updateCategory = joi.object({
+const updateCategorySchema = joi.object({
 	name: categoryName,
 	description: categoryDescription,
 	image: categoryImage,
 })
 
-const getChildCategory = joi.object({
+const getChildCategorySchema = joi.object({
 	parent_id: categoryParentId,
 })
 
+const categoryIdSchema = joi.object({
+	id,
+})
+
 module.exports = {
-	createCategory,
-	updateCategory,
-	getChildCategory,
+	createCategorySchema,
+	updateCategorySchema,
+	getChildCategorySchema,
+	categoryIdSchema,
 }

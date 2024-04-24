@@ -4,7 +4,7 @@ const BaseRepository = require("./base.repo")
 const productSkuRepo = require("./productSku.repo")
 const { product } = require("../models")
 
-class productRepo extends BaseRepository {
+class ProductRepo extends BaseRepository {
 	constructor() {
 		super(product, "product")
 	}
@@ -113,4 +113,4 @@ class productRepo extends BaseRepository {
 	}
 }
 
-module.exports = new productRepo()
+module.exports = new ProductRepo()

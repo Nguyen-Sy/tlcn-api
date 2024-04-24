@@ -17,9 +17,15 @@ const seedUser = async () => {
 	})
 	await user.create({
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a4c"),
-		email: "shop@gmail.com",
+		email: "shop.1@gmail.com",
 		phone: "0123456789",
-		name: "shop",
+		name: "shop1",
+	})
+	await user.create({
+		_id: new Types.ObjectId("65f7ec34086229fc88e93a4b"),
+		email: "shop.2@gmail.com",
+		phone: "0123456781",
+		name: "shop2",
 	})
 }
 

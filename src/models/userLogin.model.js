@@ -1,7 +1,7 @@
 "use strict"
 
 const {
-	constant: { ROLES },
+	constant: { USER_ROLES },
 } = require("../helper")
 const { Schema, model } = require("mongoose")
 
@@ -45,8 +45,8 @@ var userLoginSchema = new Schema(
 		},
 		role: {
 			type: String,
-			default: ROLES.USER,
-			enum: Object.values(ROLES),
+			default: USER_ROLES.USER,
+			enum: Object.values(USER_ROLES),
 		},
 		isDelete: Boolean,
 	},

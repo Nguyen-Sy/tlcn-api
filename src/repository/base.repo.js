@@ -16,6 +16,15 @@ class Cache {
 		return `${this.name}:${fields.join(":")}`
 	}
 
+	#hashMap = (values, hField) => {
+		return Object.fromEntries(
+			values.map((value) => [
+				value[hField].toString(),
+				JSON.stringify(value),
+			]),
+		)
+	}
+
 	#hgetAll = async (key) => {
 		return await this.redis.hVals(key)
 	}
@@ -24,15 +33,11 @@ class Cache {
 		return await this.redis.hGet(key, field)
 	}
 
-	#hset = async (key, value, fieldValue) => {
-		if (!value) {
+	#hset = async (key, values, hsetField) => {
+		if (!values) {
 			await this.redis.hSet(key, "", "")
 		}
-		await this.redis.hSet(
-			key,
-			value[fieldValue].toString(),
-			JSON.stringify(value),
-		)
+		await this.redis.hSet(key, this.#hashMap(values, hsetField))
 	}
 
 	#get = async (key) => {
@@ -65,7 +70,7 @@ class Cache {
 		let item = await this.#hget(key, field)
 		if (!item && query) {
 			item = await query()
-			await this.#hset(key, item, field)
+			await this.redis.hset(key, field.toString(), JSON.stringify(item))
 		}
 		return item
 	}
@@ -77,14 +82,15 @@ class Cache {
 			items = await query()
 			await this.#hset(key, items, field)
 		}
+		return items
 	}
 
-	findOneWithHsetField = async (filter, hsetFieldValue, hsetField, query) => {
+	findOneWithHsetField = async (filter, hsetField, query) => {
 		const key = this.#key(filter)
-		let item = await this.#hget(key, hsetFieldValue)
+		let item = await this.#hget(key, hsetField)
 		if (!item && query) {
 			item = await query()
-			await this.#hset(key, item, hsetField)
+			await this.#hset(key, [item], hsetField)
 		}
 		return item
 	}
@@ -132,15 +138,16 @@ class Repository extends Cache {
 	find = async (
 		filter,
 		cache = false,
-		mongodbOptions = { ...this.#defaultOption },
+		mongodbOptions = this.#defaultOption,
 	) => {
+		mongodbOptions = { ...this.#defaultOption, ...mongodbOptions }
 		const query = async () =>
 			await this.model
 				.find({
-					...filter,
 					is_deleted: {
 						$ne: true,
 					},
+					...filter,
 				})
 				.select(this.#createFilter(mongodbOptions))
 				.sort(mongodbOptions.sort)
@@ -157,6 +164,7 @@ class Repository extends Cache {
 		mongodbOptions = { ...this.#defaultOption },
 		redisOptions,
 	) => {
+		mongodbOptions = { ...this.#defaultOption, ...mongodbOptions }
 		const query = async () =>
 			await this.model
 				.findById(new Types.ObjectId(id))
@@ -175,6 +183,7 @@ class Repository extends Cache {
 		mongodbOptions = { ...this.#defaultOption },
 		redisOptions,
 	) => {
+		mongodbOptions = { ...this.#defaultOption, ...mongodbOptions }
 		const query = async () =>
 			await this.model
 				.findOne({
@@ -206,32 +215,6 @@ class Repository extends Cache {
 
 	findOneAndDelete = async (filter) => {
 		return await this.model.findOneAndDelete(filter)
-	}
-
-	page = async (
-		filter,
-		mongodbOptions = {
-			...this.#defaultOption,
-			...this.#defaultPaginateOption,
-		},
-	) => {
-		const _options = {
-			...this.#defaultOption,
-			...this.#defaultPaginateOption,
-			...mongodbOptions,
-		}
-		return await this.model
-			.find({
-				...filter,
-				is_deleted: {
-					$ne: true,
-				},
-			})
-			.select(this.#createFilter(_options))
-			.skip((_options.page - 1) * _options.limit)
-			.size(_options.limit)
-			.sort(_options.sort)
-			.lean()
 	}
 
 	updateMany = async (filter, object) => {

@@ -6,7 +6,10 @@ const { logger } = require("../../plugin")
 const seedApiKey = require("./apikey")
 const seedCart = require("./cart")
 const seedCategory = require("./category")
+const seedDiscount = require("./discount")
+const seedInventory = require("./inventory")
 const seedProduct = require("./product")
+const seedProductSku = require("./productSku")
 const seedUser = require("./user")
 const seedUserLogin = require("./userlogin")
 
@@ -17,7 +20,10 @@ const seed = async () => {
 	await seedUser()
 	await seedCategory()
 	await seedProduct()
+	await seedProductSku()
 	await seedCart()
+	await seedInventory()
+	await seedDiscount()
 }
 
 seed()

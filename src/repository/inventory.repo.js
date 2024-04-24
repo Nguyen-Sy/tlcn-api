@@ -3,7 +3,7 @@
 const BaseRepository = require("./base.repo")
 const { inventory } = require("../models")
 
-class inventoryRepo extends BaseRepository {
+class InventoryRepo extends BaseRepository {
 	constructor() {
 		super(inventory, "inventory")
 	}
@@ -33,4 +33,4 @@ class inventoryRepo extends BaseRepository {
 	}
 }
 
-module.exports = new inventoryRepo()
+module.exports = new InventoryRepo()

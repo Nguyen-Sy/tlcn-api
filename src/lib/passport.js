@@ -25,9 +25,9 @@ passport.use(
 			session: false,
 		},
 		async (email, password, done) => {
-			const foundUserLogin = await userLoginRepo.findByEmail(email)
-			if (foundUserLogin) {
-				if (!bcrypt.compareSync(password, foundUserLogin.password)) {
+			const existedUserLogin = await userLoginRepo.findByEmail(email)
+			if (existedUserLogin) {
+				if (!bcrypt.compareSync(password, existedUserLogin.password)) {
 					return done(new BadRequestError("Invalid email/password"))
 				}
 			}
@@ -46,7 +46,7 @@ passport.use(
 		},
 		async (payload, done) => {
 			if (!payload.email)
-				return done(new BadRequestError("Email not found"))
+				return done(new BadRequestError("Email not existed"))
 			const user = await userLoginRepo.findByEmail(payload.email)
 			if (!user || payload.exp > Date.now())
 				return done(new BadRequestError("Invalid token"))

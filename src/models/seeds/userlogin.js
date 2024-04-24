@@ -17,7 +17,18 @@ const seedUserLogin = async () => {
 	await userLogin.create({
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 		local: {
-			email: "shop@gmail.com",
+			email: "shop.1@gmail.com",
+			password:
+				"$2b$10$/jT3XHMsHMiof3wZfT2vH.efRcZOH3/7jGOi5RGEcsQJGGBzh40bi",
+		},
+		role: "0002",
+		verified: true,
+		token: "31e51522-0fee-44fd-84bb-c3db5ef1c56e",
+	})
+	await userLogin.create({
+		_id: new Types.ObjectId("65f7ec34086229fc88e93a4b"),
+		local: {
+			email: "shop.2@gmail.com",
 			password:
 				"$2b$10$/jT3XHMsHMiof3wZfT2vH.efRcZOH3/7jGOi5RGEcsQJGGBzh40bi",
 		},

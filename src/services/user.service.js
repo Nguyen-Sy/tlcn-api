@@ -34,23 +34,23 @@ class UserService {
 					// Exclude the _id field from the result
 					_id: 0,
 					// Keep the original userLogin document
-					foundUserInfo: "$$ROOT",
+					existedUserInfo: "$$ROOT",
 					// Get the first matched shopRegister document
-					foundRequestShop: { $arrayElemAt: ["$shopRegister", 0] },
+					existedRequestShop: { $arrayElemAt: ["$shopRegister", 0] },
 				},
 			},
 		]
 
-		const [{ foundUserInfo, foundRequestShop }] =
+		const [{ existedUserInfo, existedRequestShop }] =
 			await userRepo.model.aggregate(pipelines)
-		if (!foundUserInfo) throw new BadRequestError("User not found")
-		if (foundRequestShop)
+		if (!existedUserInfo) throw new BadRequestError("User not existed")
+		if (existedRequestShop)
 			throw new BadRequestError("Shop request is processing")
 
 		const requiredFields = ["name", "phone", "email", "addresses"]
 		const missingField = []
 		requiredFields.forEach((field) => {
-			if (!foundUserInfo[field]) missingField.push(field)
+			if (!existedUserInfo[field]) missingField.push(field)
 		})
 		if (missingField.length != 0)
 			throw new BadRequestError(

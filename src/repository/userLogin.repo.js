@@ -4,7 +4,7 @@ const BaseRepository = require("./base.repo")
 const { userLogin } = require("../models")
 const { v4: uuidv4 } = require("uuid")
 
-class userLoginRepo extends BaseRepository {
+class UserLoginRepo extends BaseRepository {
 	constructor() {
 		super(userLogin, "userLogin")
 	}
@@ -126,4 +126,4 @@ class userLoginRepo extends BaseRepository {
 	}
 }
 
-module.exports = new userLoginRepo()
+module.exports = new UserLoginRepo()

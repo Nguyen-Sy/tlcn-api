@@ -4,7 +4,7 @@ const CartService = require("./cart.service")
 const redisClient = require("../db/init.redis")
 const UserLoginService = require("./userLogin.service")
 const {
-	constant: { EXPIRE_TIMES },
+	constant: { OTP_EXPIRE_TIMES },
 } = require("../helper")
 const {
 	jwt: { genPairToken },
@@ -36,13 +36,13 @@ class OtpService {
 			)
 		}
 
-		if (!Object.keys(EXPIRE_TIMES).includes(type))
+		if (!Object.keys(OTP_EXPIRE_TIMES).includes(type))
 			throw new BadRequestError("Invalid otp type")
 
 		const userLogin = await UserLoginService.findByEmail(email)
 		if (!userLogin) throw new BadRequestError("Invalid email")
 
-		const createOtp = await this.createOtp(email, EXPIRE_TIMES[type])
+		const createOtp = await this.createOtp(email, OTP_EXPIRE_TIMES[type])
 		await nodemailer[`send${type[0].toUpperCase() + type.slice(1)}Email`]({
 			OTP: createOtp.token,
 			email: userLogin.local.email,
@@ -50,11 +50,11 @@ class OtpService {
 	}
 
 	static verifyOtp = async ({ token, email, type }) => {
-		if (!Object.keys(EXPIRE_TIMES).includes(type))
+		if (!Object.keys(OTP_EXPIRE_TIMES).includes(type))
 			throw new BadRequestError("Invalid otp type")
 
 		const otp = await otpRepo.findOtpByEmail(email, type)
-		if (!otp) throw new BadRequestError("Otp not found")
+		if (!otp) throw new BadRequestError("Otp not existed")
 		if (otp.token != token) {
 			if (otp.wrong_times + 1 < 3) {
 				await otpRepo.updateWrongTimes(email)

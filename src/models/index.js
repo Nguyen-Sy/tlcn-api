@@ -2,6 +2,7 @@ module.exports = {
 	apiKey: require("./apikey.model"),
 	cart: require("./cart.model"),
 	category: require("./category.model"),
+	discount: require("./discount.model"),
 	inventory: require("./inventory.model"),
 	otp: require("./otp.model"),
 	product: require("./products.model"),

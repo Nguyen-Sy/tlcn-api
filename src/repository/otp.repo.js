@@ -2,11 +2,11 @@
 
 const BaseRepository = require("./base.repo")
 const {
-	constant: { EXPIRE_TIMES },
+	constant: { OTP_EXPIRE_TIMES },
 } = require("../helper")
 const { otp } = require("../models")
 
-class otpRepo extends BaseRepository {
+class OtpRepo extends BaseRepository {
 	constructor() {
 		super(otp, "otp")
 	}
@@ -22,7 +22,7 @@ class otpRepo extends BaseRepository {
 	findOtpByEmail = async (email, type = "verify") => {
 		return await this.findOne({
 			email,
-			createdAt: { $gte: Date.now() - EXPIRE_TIMES[type] * 1000 },
+			createdAt: { $gte: Date.now() - OTP_EXPIRE_TIMES[type] * 1000 },
 		})
 	}
 
@@ -38,4 +38,4 @@ class otpRepo extends BaseRepository {
 	}
 }
 
-module.exports = new otpRepo()
+module.exports = new OtpRepo()

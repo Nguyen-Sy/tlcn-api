@@ -10,6 +10,9 @@ const seedCart = async () => {
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a4a"),
 	})
 	await cart.create({
+		_id: new Types.ObjectId("65f7ec34086229fc88e93a4b"),
+	})
+	await cart.create({
 		_id: new Types.ObjectId("65f7ec34086229fc88e93a4c"),
 	})
 }

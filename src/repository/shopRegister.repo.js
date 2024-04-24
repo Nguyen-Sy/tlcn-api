@@ -4,7 +4,7 @@ const BaseRepository = require("./base.repo")
 const { isNull } = require("lodash")
 const { shopRegister } = require("../models")
 
-class otpRepo extends BaseRepository {
+class ShopRegisterRepo extends BaseRepository {
 	constructor() {
 		super(shopRegister, "shopRegister")
 	}
@@ -31,4 +31,4 @@ class otpRepo extends BaseRepository {
 	}
 }
 
-module.exports = new otpRepo()
+module.exports = new ShopRegisterRepo()

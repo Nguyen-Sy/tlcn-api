@@ -3,7 +3,7 @@
 const BaseRepository = require("./base.repo")
 const { cart } = require("../models")
 
-class cartRepo extends BaseRepository {
+class CartRepo extends BaseRepository {
 	constructor() {
 		super(cart, "cart")
 	}
@@ -39,4 +39,4 @@ class cartRepo extends BaseRepository {
 	}
 }
 
-module.exports = new cartRepo()
+module.exports = new CartRepo()

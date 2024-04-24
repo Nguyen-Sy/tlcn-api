@@ -15,7 +15,7 @@ const router = express.Router()
 router.get(
 	"/",
 	validator({
-		query: category.getChildCategory,
+		query: category.getChildCategorySchema,
 	}),
 	asyncHandler(categoryController.getCategory),
 )
@@ -27,17 +27,22 @@ router.use(
 router.post(
 	"/",
 	validator({
-		body: category.createCategory,
+		body: category.createCategorySchema,
 	}),
 	asyncHandler(categoryController.createCategory),
 )
 router.put(
 	"/:id",
 	validator({
-		body: category.updateCategory,
+		params: category.categoryIdSchema,
+		body: category.updateCategorySchema,
 	}),
 	asyncHandler(categoryController.updateCategory),
 )
-router.delete("/:id", asyncHandler(categoryController.deleteCategory))
+router.delete(
+	"/:id",
+	validator({ params: category.categoryIdSchema }),
+	asyncHandler(categoryController.deleteCategory),
+)
 
 module.exports = router

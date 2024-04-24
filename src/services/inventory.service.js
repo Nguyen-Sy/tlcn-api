@@ -15,7 +15,7 @@ class InventoryService {
 	static deleteInventory = async (id) => {
 		const productInventory = await inventoryRepo.findById(id)
 		if (!productInventory)
-			throw new BadRequestError("Product inventory not found")
+			throw new BadRequestError("Product inventory not existed")
 
 		if (productInventory.status !== "pending")
 			throw new BadRequestError("Can't delete used inventory")

@@ -2,7 +2,7 @@
 
 const bcrypt = require("bcrypt")
 const {
-	constant: { ROLES },
+	constant: { USER_ROLES },
 } = require("../helper")
 const { userLoginRepo } = require("../repository")
 
@@ -27,7 +27,7 @@ class UserLoginService {
 	static updateShopRole = async (email) => {
 		return await userLoginRepo.updateUserRole({
 			email,
-			role: ROLES.SHOP,
+			role: USER_ROLES.SHOP,
 		})
 	}
 }

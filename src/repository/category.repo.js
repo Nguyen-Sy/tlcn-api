@@ -3,7 +3,7 @@
 const BaseRepository = require("./base.repo")
 const { category } = require("../models")
 
-class categoryRepo extends BaseRepository {
+class CategoryRepo extends BaseRepository {
 	constructor() {
 		super(category, "category")
 	}
@@ -36,4 +36,4 @@ class categoryRepo extends BaseRepository {
 	}
 }
 
-module.exports = new categoryRepo()
+module.exports = new CategoryRepo()

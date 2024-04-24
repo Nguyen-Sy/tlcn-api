@@ -1,7 +1,10 @@
 const joi = require("joi")
+const {
+	constant: { OTP_EXPIRE_TIMES },
+} = require("../helper")
 const { email } = require("./common.schema")
 
-const otpType = joi.string().valid("verify", "forgot")
+const otpType = joi.string().valid(...Object.keys(OTP_EXPIRE_TIMES))
 
 const verifySchema = joi.object({
 	type: otpType.required(),

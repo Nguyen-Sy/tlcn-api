@@ -3,7 +3,7 @@
 const BaseRepository = require("./base.repo")
 const { user } = require("../models")
 
-class userRepo extends BaseRepository {
+class UserRepo extends BaseRepository {
 	constructor() {
 		super(user, "user")
 	}
@@ -23,4 +23,4 @@ class userRepo extends BaseRepository {
 	}
 }
 
-module.exports = new userRepo()
+module.exports = new UserRepo()

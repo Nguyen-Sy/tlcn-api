@@ -3,7 +3,8 @@ module.exports = {
 	otp: require("./otp.schema"),
 	cart: require("./cart.schema"),
 	category: require("./category.schema"),
+	discount: require("./discount.schema"),
+	inventory: require("./inventory.schema"),
 	product: require("./product.schema"),
 	user: require("./user.schema"),
-	inventory: require("./inventory.schema"),
 }

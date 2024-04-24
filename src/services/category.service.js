@@ -13,7 +13,8 @@ class CategoryService {
 		let root_id = uuidv4()
 		if (parent_id) {
 			const parentCategory = await categoryRepo.findById(parent_id)
-			if (!parentCategory) throw new BadRequestError("Not found category")
+			if (!parentCategory)
+				throw new BadRequestError("Category not existed")
 			await categoryRepo.updateMany(
 				{
 					right: { $gte: parentCategory.right },
@@ -54,7 +55,7 @@ class CategoryService {
 		let query
 		if (parent_id) {
 			const parentCate = await categoryRepo.findById(parent_id)
-			if (!parentCate) throw new BadRequestError("Invalid category id")
+			if (!parentCate) throw new BadRequestError("Category not existed")
 			query = {
 				left: { $gt: parentCate.left },
 				right: { $lte: parentCate.right },
@@ -83,25 +84,25 @@ class CategoryService {
 	}
 
 	static deleteCategory = async (id) => {
-		const foundCategory = await categoryRepo.findById(id, true)
-		if (!foundCategory) throw new BadRequestError("Invalid category id")
+		const existedCategory = await categoryRepo.findById(id, true)
+		if (!existedCategory) throw new BadRequestError("Category not existed")
 
-		const width = foundCategory.right - foundCategory.left + 1
+		const width = existedCategory.right - existedCategory.left + 1
 		await categoryRepo.deleteMany({
-			root_id: foundCategory.root_id,
-			left: { $gte: foundCategory.left },
-			right: { $lte: foundCategory.right },
+			root_id: existedCategory.root_id,
+			left: { $gte: existedCategory.left },
+			right: { $lte: existedCategory.right },
 		})
 
 		await categoryRepo.updateMany(
 			{
-				right: { $gt: foundCategory.right },
+				right: { $gt: existedCategory.right },
 			},
 			{ $inc: { right: -width } },
 		)
 		await categoryRepo.updateMany(
 			{
-				left: { $gt: foundCategory.right },
+				left: { $gt: existedCategory.right },
 			},
 			{ $inc: { left: -width } },
 		)

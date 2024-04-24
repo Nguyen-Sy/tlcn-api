@@ -1,5 +1,7 @@
 "use strict"
-
+const {
+	constant: { CART_STATUS },
+} = require("../helper")
 const { Schema, model } = require("mongoose")
 
 const DOCUMENT_NAME = "cart"
@@ -13,7 +15,7 @@ var cartSchema = new Schema(
 		},
 		status: {
 			type: String,
-			enum: ["active", "completed", "failed", "pending"],
+			enum: CART_STATUS,
 			default: "active",
 		},
 	},

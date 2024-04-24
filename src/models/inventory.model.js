@@ -1,5 +1,7 @@
 "use strict"
-
+const {
+	constant: { INVENTORY_STATUS },
+} = require("../helper")
 const { Schema, model } = require("mongoose")
 
 const DOCUMENT_NAME = "inventory"
@@ -26,7 +28,7 @@ var inventorySchema = new Schema(
 		},
 		status: {
 			type: String,
-			enum: ["in_used", "out_of_stock", "pending"],
+			enum: INVENTORY_STATUS,
 			default: "pending",
 		},
 	},

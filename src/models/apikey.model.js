@@ -1,5 +1,8 @@
 "use strict"
 
+const {
+	constant: { API_KEY_PERMISSIONS },
+} = require("../helper")
 const { Schema, model } = require("mongoose")
 
 const DOCUMENT_NAME = "apiKey"
@@ -19,7 +22,7 @@ var apiKeySchema = new Schema(
 		permissions: {
 			type: [String],
 			require: true,
-			enum: ["0000", "1111", "2222"],
+			enum: Object.values(API_KEY_PERMISSIONS),
 		},
 	},
 	{
