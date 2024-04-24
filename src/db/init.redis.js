@@ -13,9 +13,9 @@ class Database {
 	}
 
 	connect() {
-		if ("redis://localhost:6379/1") {
+		if (REDIS_URL) {
 			const redisClient = redis.createClient({
-				url: "redis://localhost:6379/1",
+				url: REDIS_URL,
 			})
 			redisClient.connect()
 			this.client = redisClient
