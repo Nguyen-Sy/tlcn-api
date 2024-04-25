@@ -6,9 +6,7 @@ const { default: helmet } = require("helmet")
 const app = express()
 const config = require("./config")
 
-const logger = require("./middleware/logger.middleware")
-const requestTracking = require("./middleware/requestTracking.middleware")
-const responseFormatter = require("./middleware/format.middleware")
+const httpRequest = require("./middleware/httpRequest.middleware")
 const {
 	handleError,
 	handleNotFound,
@@ -27,11 +25,9 @@ app.use(
 		extended: true,
 	}),
 )
-app.use(logger)
-app.use(responseFormatter)
-app.use(requestTracking)
+app.use(httpRequest({ requestLogger: config.NODE_ENV === "DEV" }))
 // Show routes called in console during development
-if (config.NODE_ENV !== "production") {
+if (config.NODE_ENV === "DEV") {
 	app.use(morgan("dev"))
 }
 

@@ -136,6 +136,13 @@ class ProductService {
 		pipelines.concat([{ $skip: (page - 1) * limit }, { $limit: limit }])
 		return await productRepo.model.aggregate(pipelines)
 	}
+
+	static getProductDetail = async (productId) => {
+		const productDetails = await productRepo.findDetailProducts([productId])
+		if (productDetails.length == 0)
+			throw new BadRequestError("Product is not existed")
+		return productDetails[0]
+	}
 }
 
 module.exports = ProductService

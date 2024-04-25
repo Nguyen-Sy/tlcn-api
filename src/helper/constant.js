@@ -6,6 +6,7 @@ const API_KEY_PERMISSIONS = {
 	FREE: "2222",
 }
 
+const CART_MAX_QUANTITY = 20
 const CART_STATUS = [...COMMON_STATUSES, "pending"]
 
 const DISCOUNT_APPLY_TO = ["delivery", "product"]
@@ -27,6 +28,7 @@ const USER_ROLES = {
 
 module.exports = {
 	API_KEY_PERMISSIONS,
+	CART_MAX_QUANTITY,
 	CART_STATUS,
 	DISCOUNT_APPLY_TO,
 	DISCOUNT_TYPE,

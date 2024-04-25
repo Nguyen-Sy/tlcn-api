@@ -29,18 +29,19 @@ class Cache {
 		return await this.redis.hVals(key)
 	}
 
-	#hget = async (key, field) => {
+	hget = async (key, field) => {
 		return await this.redis.hGet(key, field)
 	}
 
-	#hset = async (key, values, hsetField) => {
+	hset = async (key, values, hsetField) => {
 		if (!values) {
 			await this.redis.hSet(key, "", "")
 		}
+		console.log(this.#hashMap(values, hsetField))
 		await this.redis.hSet(key, this.#hashMap(values, hsetField))
 	}
 
-	#get = async (key) => {
+	get = async (key) => {
 		const value = await this.redis.get(key)
 		try {
 			return JSON.parse(value)
@@ -55,7 +56,7 @@ class Cache {
 
 	findOneWithCache = async (filter, query, redisOptions) => {
 		const key = this.#key(filter)
-		let item = await this.#get(key)
+		let item = await this.get(key)
 		if (!item && query) {
 			item = await query()
 			if (item) {
@@ -65,9 +66,9 @@ class Cache {
 		return item
 	}
 
-	findOneInHset = async (filter, field, query = null) => {
+	findOneInHset = async (filter, field = "_id", query = null) => {
 		const key = this.#key(filter)
-		let item = await this.#hget(key, field)
+		let item = await this.hget(key, field)
 		if (!item && query) {
 			item = await query()
 			await this.redis.hset(key, field.toString(), JSON.stringify(item))
@@ -75,22 +76,22 @@ class Cache {
 		return item
 	}
 
-	findWithCache = async (filter, field, query) => {
+	findWithCache = async (filter, field = "_id", query) => {
 		const key = this.#key(filter)
 		let items = await this.#hgetAll(key)
-		if (!items && query) {
+		if (!items.length != 0 && query) {
 			items = await query()
-			await this.#hset(key, items, field)
+			await this.hset(key, items, field)
 		}
 		return items
 	}
 
 	findOneWithHsetField = async (filter, hsetField, query) => {
 		const key = this.#key(filter)
-		let item = await this.#hget(key, hsetField)
+		let item = await this.hget(key, hsetField)
 		if (!item && query) {
 			item = await query()
-			await this.#hset(key, [item], hsetField)
+			await this.hset(key, [item], hsetField)
 		}
 		return item
 	}
@@ -221,6 +222,37 @@ class Repository extends Cache {
 		return await this.model.updateMany(filter, object, {
 			new: true,
 		})
+	}
+
+	page = async (
+		filter,
+		mongodbOptions = {
+			...this.#defaultOption,
+			...this.#defaultPaginateOption,
+		},
+	) => {
+		mongodbOptions = {
+			...this.#defaultOption,
+			...this.#defaultPaginateOption,
+			...mongodbOptions,
+		}
+		const items = await this.model
+			.find({
+				is_deleted: {
+					$ne: true,
+				},
+				...filter,
+			})
+			.select(this.#createFilter(mongodbOptions))
+			.sort(mongodbOptions.sort)
+			.lean()
+		let { page, limit } = mongodbOptions
+		return {
+			items: items.slice((page - 1) * limit, page * limit),
+			page,
+			limit,
+			totalPage: Math.ceil(items.length / limit),
+		}
 	}
 }
 

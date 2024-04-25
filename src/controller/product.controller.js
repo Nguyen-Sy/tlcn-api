@@ -22,17 +22,12 @@ class ProductController {
 		res.sendData(await ProductService.unpublishProduct(req.params.id))
 	}
 
-	findProductByCategory = async (req, res) => {
-		res.sendData(
-			await ProductService.findProductByCategory(
-				req.params.category,
-				req.query,
-			),
-		)
-	}
-
 	findProduct = async (req, res) => {
 		res.sendData(await ProductService.findProduct(req.query))
+	}
+
+	findProductDetail = async (req, res) => {
+		res.sendData(await ProductService.getProductDetail(req.params.id))
 	}
 }
 

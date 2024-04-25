@@ -1,18 +1,8 @@
 const joi = require("joi")
-const { id } = require("./common.schema")
-
-const cartProductList = joi.array().items(
-	joi.object().keys({
-		_id: id,
-		name: joi.string().required(),
-		description: joi.string().required(),
-		price: joi.number().required(),
-		quantity: joi.number().integer(),
-	}),
-)
 
 const updateCartSchema = joi.object().keys({
-	product_list: cartProductList,
+	product_sku_id: joi.string().required(),
+	quantity: joi.number().integer().required(),
 })
 
 module.exports = {

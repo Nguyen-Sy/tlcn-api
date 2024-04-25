@@ -20,7 +20,7 @@ const seedProduct = async () => {
 		],
 		rating: 4.5,
 		price: 60000,
-		is_published: false,
+		is_published: true,
 		is_deleted: false,
 		attributes: { key: "value" },
 	})
@@ -45,7 +45,7 @@ const seedProduct = async () => {
 		],
 		rating: 4.5,
 		price: 80000,
-		is_published: false,
+		is_published: true,
 		is_deleted: false,
 		attributes: { key: "value" },
 	})
@@ -65,7 +65,7 @@ const seedProduct = async () => {
 		],
 		rating: 4.5,
 		price: 100000,
-		is_published: false,
+		is_published: true,
 		is_deleted: false,
 		attributes: { key: "value" },
 	})

@@ -1,5 +1,5 @@
 const joi = require("joi")
-const { isValidObjectId } = require("mongoose")
+const { isValidObjectId, Types } = require("mongoose")
 
 const page = joi.number().min(1).integer()
 const limit = joi.number().min(5).integer()
@@ -17,7 +17,7 @@ const password = joi
 const uri = joi.string().uri()
 const id = joi.string().custom((value, helper) => {
 	if (!isValidObjectId(value)) return helper.message("Invalid objectId")
-	return value
+	return new Types.ObjectId(value)
 })
 const phoneNumber = joi
 	.string()

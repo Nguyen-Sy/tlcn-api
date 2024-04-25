@@ -9,7 +9,13 @@ const { passport } = require("../lib")
 const { product } = require("../schema")
 const router = express.Router()
 
-router.get("/:category", asyncHandler(productController.findProductByCategory))
+router.get(
+	"/:id",
+	validator({
+		params: product.productIdSchema,
+	}),
+	asyncHandler(productController.findProductDetail),
+)
 router.get(
 	"/",
 	validator({
