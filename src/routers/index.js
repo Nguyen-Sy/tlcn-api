@@ -15,6 +15,7 @@ router.use("/category", require("./category"))
 router.use("/product", require("./product"))
 router.use("/inventory", require("./inventory"))
 router.use("/cart", require("./cart"))
+router.use("/shipping-method", require("./shippingMethod"))
 
 router.get("/", (req, res) => {
 	res.sendData("ok")

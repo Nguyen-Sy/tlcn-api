@@ -22,8 +22,8 @@ class ProductController {
 		res.sendData(await ProductService.unpublishProduct(req.params.id))
 	}
 
-	findProduct = async (req, res) => {
-		res.sendData(await ProductService.findProduct(req.query))
+	getProduct = async (req, res) => {
+		res.sendData(await ProductService.getProduct(req.query))
 	}
 
 	findProductDetail = async (req, res) => {

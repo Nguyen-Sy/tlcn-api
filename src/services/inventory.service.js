@@ -3,12 +3,19 @@ const { BadRequestError, UnauthorizedError } = require("../core/error.response")
 const { inventoryRepo } = require("../repository")
 
 class InventoryService {
-	static createInventory = async ({ product_sku_id, shop, stock, price }) => {
+	static createInventory = async ({
+		product_sku_id,
+		shop,
+		stock,
+		price,
+		location,
+	}) => {
 		return await inventoryRepo.createInventory({
 			product_sku_id,
 			shop,
 			stock,
 			price,
+			location,
 		})
 	}
 
@@ -59,6 +66,22 @@ class InventoryService {
 			limit,
 			totalPage: Math.ceil(productSkuInventories.length / limit),
 		}
+	}
+
+	static updateInventory = async ({ id, location, stock, price }) => {
+		const existedInventory = await inventoryRepo.findById(id)
+		if (!existedInventory)
+			throw new BadRequestError("Inventory is not existed")
+
+		if (existedInventory.status != "pending")
+			throw new BadRequestError("Can not updated used inventory")
+
+		return await inventoryRepo.updateInventory({
+			id,
+			location,
+			stock,
+			price,
+		})
 	}
 }
 

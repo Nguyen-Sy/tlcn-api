@@ -7,7 +7,7 @@ const {
 const { userLoginRepo } = require("../repository")
 
 class UserLoginService {
-	static findByEmail = async (email) => {
+	static getByEmail = async (email) => {
 		return await userLoginRepo.findByEmail(email)
 	}
 

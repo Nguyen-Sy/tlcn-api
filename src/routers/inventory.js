@@ -31,10 +31,19 @@ router.post(
 	asyncHandler(inventoryController.createInventory),
 )
 
+router.post(
+	"/:id",
+	validator({
+		params: inventory.idInventorySchema,
+		body: inventory.updateInventorySchema,
+	}),
+	asyncHandler(inventoryController.updateInventory),
+)
+
 router.delete(
 	"/:id",
 	validator({
-		params: inventory.deleteInventorySchema,
+		params: inventory.idInventorySchema,
 	}),
 	asyncHandler(inventoryController.deleteInventory),
 )

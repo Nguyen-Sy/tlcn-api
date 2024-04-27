@@ -21,7 +21,7 @@ router.get(
 	validator({
 		query: product.productQuerySchema,
 	}),
-	asyncHandler(productController.findProduct),
+	asyncHandler(productController.getProduct),
 )
 
 router.use(passport.authenticate("jwt", { session: false }))

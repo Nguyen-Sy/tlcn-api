@@ -10,6 +10,10 @@ class InventoryController {
 		)
 	}
 
+	deleteInventory = async (req, res) => {
+		res.sendData(await InventoryService.deleteInventory(req.params.id))
+	}
+
 	getInventory = async (req, res) => {
 		res.sendData(
 			await InventoryService.getInventory({
@@ -19,8 +23,13 @@ class InventoryController {
 		)
 	}
 
-	deleteInventory = async (req, res) => {
-		res.sendData(await InventoryService.deleteInventory(req.params.id))
+	updateInventory = async (req, res) => {
+		res.sendData(
+			await InventoryService.updateInventory({
+				...req.body,
+				...req.params,
+			}),
+		)
 	}
 }
 

@@ -44,11 +44,11 @@ class AuthService {
 		if (!existedUserLogin)
 			throw new BadRequestError("User's email/password is incorrect")
 
-		if (!existedUserLogin.verified)
-			throw new BadRequestError("User's account has not been verified")
-
 		if (!bcrypt.compareSync(password, existedUserLogin.local.password))
 			throw new BadRequestError("User's email/password is incorrect")
+
+		if (!existedUserLogin.verified)
+			throw new BadRequestError("User's account has not been verified")
 
 		const pairToken = genPairToken({
 			id: existedUserLogin._id,
@@ -60,7 +60,6 @@ class AuthService {
 		]
 		if (existedUserLogin.refresh_tokens_used.length >= 15)
 			updatedRefreshTokensUsed.pop()
-
 		userLoginRepo.findOneAndUpdate(
 			{
 				_id: existedUserLogin._id,

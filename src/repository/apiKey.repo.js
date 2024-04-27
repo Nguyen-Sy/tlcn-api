@@ -16,7 +16,7 @@ class ApiKeyRepo extends BaseRepository {
 		})
 	}
 
-	findByKey = async (key) => {
+	getApiKeyByKey = async (key) => {
 		return await this.findOne(
 			{
 				key,

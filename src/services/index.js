@@ -8,4 +8,5 @@ module.exports = {
 	OtpService: require("./otp.service"),
 	UserLoginService: require("./userLogin.service"),
 	ProductService: require("./product.service"),
+	ShippingMethodService: require("./shippingMethod.service"),
 }

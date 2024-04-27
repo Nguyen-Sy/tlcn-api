@@ -7,8 +7,8 @@ class ApiKeyService {
 		return await apiKeyRepo.createApiKey("0000")
 	}
 
-	static findApikeyByKey = async (key) => {
-		return await apiKeyRepo.findByKey(key)
+	static getApiKeyByKey = async (key) => {
+		return await apiKeyRepo.getApiKeyByKey(key)
 	}
 }
 

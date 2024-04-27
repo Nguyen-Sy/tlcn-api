@@ -9,5 +9,6 @@ module.exports = {
 	productSkuRepo: require("./productSku.repo"),
 	userRepo: require("./user.repo"),
 	userLoginRepo: require("./userLogin.repo"),
+	shippingMethodRepo: require("./shippingMethod.repo"),
 	shopRegisterRepo: require("./shopRegister.repo"),
 }

@@ -67,7 +67,7 @@ class ProductService {
 		return await productRepo.unpublishProduct(productId)
 	}
 
-	static findProduct = async ({
+	static getProduct = async ({
 		search,
 		category,
 		price,

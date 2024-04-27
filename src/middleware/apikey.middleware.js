@@ -8,7 +8,7 @@ const apiKey = async (req, res, next) => {
 		return next(new ForbiddenError("Missing api-key"))
 	}
 
-	const objKey = await ApiKeyService.findApikeyByKey(key)
+	const objKey = await ApiKeyService.getApiKeyByKey(key)
 	if (!objKey) {
 		return next(new ForbiddenError("Apikey Invalid"))
 	}

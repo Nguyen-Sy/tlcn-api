@@ -31,6 +31,10 @@ var inventorySchema = new Schema(
 			enum: INVENTORY_STATUS,
 			default: "pending",
 		},
+		location: {
+			type: String,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

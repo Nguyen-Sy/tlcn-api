@@ -7,6 +7,7 @@ module.exports = {
 	otp: require("./otp.model"),
 	product: require("./products.model"),
 	productSku: require("./productSku.model"),
+	shippingMethod: require("./shippingMethod.model"),
 	shopRegister: require("./shopRegister.model"),
 	user: require("./user.model"),
 	userLogin: require("./userLogin.model"),
